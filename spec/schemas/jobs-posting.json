@@ -1,0 +1,20 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:jobs/posting@1",
+  "description": "A job posting with compensation range, employment type, remote work flag, requirements list, and application action.",
+  "keys": {
+    "t": { "full": "title", "type": "string", "required": true },
+    "co": { "full": "company", "type": "string", "required": true },
+    "loc": { "full": "location", "type": "string", "required": false },
+    "rem": { "full": "remote", "type": "boolean", "required": false },
+    "smin": { "full": "salary_min", "type": "number", "required": false },
+    "smax": { "full": "salary_max", "type": "number", "required": false },
+    "cur": { "full": "currency", "type": "string", "required": false, "default": "USD" },
+    "typ": { "full": "type", "type": "string", "required": false },
+    "desc": { "full": "description", "type": "string", "required": false },
+    "req": { "full": "requirements", "type": "array", "required": false },
+    "apply": { "full": "apply_url", "type": "url", "required": false, "layer": "action" },
+    "post": { "full": "posted", "type": "string", "required": false },
+    "exp": { "full": "expires", "type": "string", "required": false }
+  }
+}

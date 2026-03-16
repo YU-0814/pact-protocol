@@ -1,0 +1,59 @@
+{
+  "$pact": "1.0",
+  "$s": "pact:food/restaurant@1",
+  "$t": 1710590400,
+  "$ttl": 600,
+  "items": [
+    {
+      "id": "rest-4420",
+      "n": "광장한상",
+      "cui": "korean_traditional",
+      "r": 4.7,
+      "rv": 892,
+      "pr": "$$",
+      "addr": "서울 강남구 역삼동 123-4",
+      "ph": "+82-2-555-1234",
+      "hrs": {"mon-fri": "11:00-22:00", "sat-sun": "11:00-23:00"},
+      "lat": 37.4979,
+      "lng": 127.0276,
+      "dlv": true
+    }
+  ],
+  "actions": [
+    {
+      "verb": "POST",
+      "name": "reserve",
+      "description": "Make a reservation",
+      "url": "https://api.seoleats.example.com/pact/reservations",
+      "body": {"restaurant_id": "string", "date": "string", "time": "string", "party_size": "integer"},
+      "platforms": {
+        "web": "https://seoleats.example.com/reserve/rest-4420",
+        "ios": "https://seoleats.example.com/reserve/rest-4420",
+        "android": "https://seoleats.example.com/reserve/rest-4420",
+        "ios_fallback": "seoleats://reserve/rest-4420",
+        "android_fallback": "intent://reserve/rest-4420#Intent;scheme=seoleats;package=com.seoleats.app;end"
+      }
+    },
+    {
+      "verb": "POST",
+      "name": "order_delivery",
+      "description": "Order for delivery",
+      "url": "https://api.seoleats.example.com/pact/orders",
+      "body": {"restaurant_id": "string", "items": "array"},
+      "platforms": {
+        "web": "https://seoleats.example.com/order/rest-4420",
+        "ios": "https://seoleats.example.com/order/rest-4420",
+        "android": "https://seoleats.example.com/order/rest-4420",
+        "ios_fallback": "seoleats://order/rest-4420",
+        "android_fallback": "intent://order/rest-4420#Intent;scheme=seoleats;package=com.seoleats.app;end"
+      }
+    },
+    {
+      "verb": "GET",
+      "name": "get_menu",
+      "description": "View restaurant menu",
+      "url": "https://api.seoleats.example.com/pact/restaurants/rest-4420/menu"
+    }
+  ],
+  "total": 1
+}

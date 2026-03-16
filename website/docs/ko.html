@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PACT 스펙 문서 &mdash; AI 에이전트 콘텐츠 전송 프로토콜</title>
+  <meta name="description" content="PACT 프로토콜 스펙: 아키텍처, 디스커버리, 스키마 시스템, 데이터 레이어, 액션, 적합도 등급.">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;padding:2rem 0 4rem;align-items:start}@media(max-width:900px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static!important;border-right:none!important;border-bottom:1px solid var(--border);padding-bottom:1rem;margin-bottom:1rem}}
+    .docs-sidebar{position:sticky;top:5rem;border-right:1px solid var(--border);padding-right:1.5rem;max-height:calc(100vh - 6rem);overflow-y:auto}
+    .docs-sidebar__title{font-family:var(--font-mono);font-size:.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem}
+    .docs-nav{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}.docs-nav a{display:block;padding:.4rem .75rem;font-size:.85rem;color:var(--text-secondary);border-radius:var(--radius-sm);transition:all var(--transition);border-left:2px solid transparent}.docs-nav a:hover{color:var(--accent);background:var(--accent-dim)}.docs-nav a.active{color:var(--accent);border-left-color:var(--accent);background:var(--accent-dim)}.docs-nav .sub{padding-left:1.5rem}.docs-nav .sub a{font-size:.8rem;padding:.3rem .75rem}
+    .docs-content{max-width:var(--content-width);min-width:0}.docs-content h1{font-size:2rem;margin-bottom:.75rem}.docs-content h2{font-size:1.5rem;margin-top:3rem;margin-bottom:1rem;padding-top:1.5rem;border-top:1px solid var(--border)}.docs-content h2:first-of-type{border-top:none;margin-top:2rem;padding-top:0}.docs-content h3{font-size:1.15rem;margin-top:2rem;margin-bottom:.75rem}.docs-content p{margin-bottom:1rem}.docs-content ul,.docs-content ol{margin-bottom:1rem;padding-left:1.5rem;color:var(--text-secondary)}.docs-content li{margin-bottom:.4rem;font-size:.95rem}.docs-content pre{margin-bottom:1.5rem}.docs-content code{font-size:.85em}
+    .docs-content table{width:100%;border-collapse:collapse;margin-bottom:1.5rem;font-size:.9rem}.docs-content th,.docs-content td{text-align:left;padding:.6rem .85rem;border:1px solid var(--border)}.docs-content th{background:var(--bg-tertiary);font-family:var(--font-mono);font-size:.8rem;font-weight:600;color:var(--text-secondary)}.docs-content td{color:var(--text-secondary)}
+    .spec-link{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-mono);font-size:.8rem;color:var(--accent);margin-top:.5rem}.spec-link:hover{color:var(--accent-hover)}
+    .callout{background:var(--accent-dim);border:1px solid rgba(0,212,170,.25);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.5rem}.callout p{color:var(--text-primary);margin:0;font-size:.9rem}.callout code{background:rgba(0,212,170,.15)}
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="/ko.html" class="logo">PACT<span>protocol</span></a>
+      <button class="nav-toggle" aria-label="메뉴 열기" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
+      <nav>
+        <ul class="nav">
+          <li><a href="/docs/ko.html" class="active">스펙</a></li>
+          <li><a href="/playground/ko.html">플레이그라운드</a></li>
+          <li><a href="/score/ko.html">점수</a></li>
+          <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="docs-layout">
+
+        <aside class="docs-sidebar">
+          <div class="docs-sidebar__title">스펙 문서</div>
+          <ul class="docs-nav" id="docsNav">
+            <li><a href="#overview" class="active">개요</a></li>
+            <li><a href="#architecture">아키텍처</a></li>
+            <li class="sub"><a href="#layer-0">레이어 0: 디스커버리</a></li>
+            <li class="sub"><a href="#layer-1">레이어 1: 스키마</a></li>
+            <li class="sub"><a href="#layer-2">레이어 2: 데이터</a></li>
+            <li class="sub"><a href="#layer-3">레이어 3: 미디어</a></li>
+            <li class="sub"><a href="#layer-4">레이어 4: 액션</a></li>
+            <li><a href="#discovery">디스커버리 프로토콜</a></li>
+            <li><a href="#schema-system">스키마 시스템</a></li>
+            <li><a href="#data-layer">데이터 레이어</a></li>
+            <li><a href="#actions">액션</a></li>
+            <li><a href="#conformance">적합도 등급</a></li>
+            <li><a href="#cross-platform">크로스 플랫폼</a></li>
+            <li><a href="#security">보안</a></li>
+          </ul>
+        </aside>
+
+        <article class="docs-content">
+          <h1>PACT 프로토콜 스펙 문서</h1>
+          <p>버전 1.0 &mdash; PACT 워킹 그룹 2026</p>
+          <p style="font-size:0.8rem;color:var(--text-muted);"><a href="/docs/" style="color:var(--accent);text-decoration:none;">English</a> | 한국어</p>
+
+          <div class="callout">
+            <p>이것은 PACT 스펙의 요약입니다. 전체 규격은 <a href="https://github.com/pact-protocol/pact-protocol/tree/main/spec" target="_blank" rel="noopener">GitHub 저장소</a>를 참조하세요.</p>
+          </div>
+
+          <h2 id="overview">개요</h2>
+          <p>PACT (Protocol for Agent Content Transfer)는 AI 에이전트에게 구조화된, 토큰 효율적인 콘텐츠를 제공하는 개방형 표준입니다. 탐색 표준(robots.txt, llms.txt)과 상호작용 프로토콜(MCP, A2A) 사이의 빈자리를 채웁니다.</p>
+          <p><strong>MCP</strong>가 AI 에이전트에게 도구를 제공하고 <strong>A2A</strong>가 에이전트를 연결한다면, PACT는 콘텐츠 전달 문제를 해결합니다: 웹사이트가 자신의 실제 데이터(상품, 기사, 목록)를 컴팩트하고, 타입이 지정된, 액션 가능한 형식으로 AI 에이전트에게 제공하는 방법.</p>
+
+          <h3>설계 원칙</h3>
+          <ul>
+            <li><strong>토큰 효율성</strong> &mdash; AI 모델이 소비하는 토큰 최소화 (HTML 대비 57배 절감)</li>
+            <li><strong>점진적 채택</strong> &mdash; JSON 파일 하나로 시작, 점진적으로 확장</li>
+            <li><strong>스키마 기반</strong> &mdash; 버전이 지정된 스키마로 안정적인 파싱</li>
+            <li><strong>게시자 통제</strong> &mdash; 사이트 운영자가 조건, 가격, 접근 규칙을 정의</li>
+            <li><strong>크로스 플랫폼</strong> &mdash; 웹, 모바일, IoT 등 HTTP가 통하는 어디서나</li>
+          </ul>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md" target="_blank" rel="noopener">GitHub 전체 스펙 &rarr;</a>
+
+          <h2 id="architecture">아키텍처</h2>
+          <p>PACT는 5단계 스택을 사용하며, 각 레이어는 이전 레이어 위에 구축됩니다. 점진적으로 채택할 수 있습니다.</p>
+
+          <table>
+            <thead><tr><th>레이어</th><th>이름</th><th>목적</th><th>핵심 파일 / 필드</th></tr></thead>
+            <tbody>
+              <tr><td><code>0</code></td><td>Discovery</td><td>에이전트가 PACT 엔드포인트를 찾습니다</td><td><code>/.well-known/pact.json</code></td></tr>
+              <tr><td><code>1</code></td><td>Schema</td><td>데이터 타입이 식별되고 버전이 지정됩니다</td><td><code>pact:domain/type@version</code></td></tr>
+              <tr><td><code>2</code></td><td>Data</td><td>구조화된 JSON 콘텐츠 응답</td><td><code>$pact</code>, <code>$s</code>, <code>items</code></td></tr>
+              <tr><td><code>3</code></td><td>Media</td><td>이미지 및 비디오 참조</td><td>데이터 필드 내 URL 포인터</td></tr>
+              <tr><td><code>4</code></td><td>Actions</td><td>트랜잭션 작업</td><td><code>$actions</code> 배열</td></tr>
+            </tbody>
+          </table>
+
+          <h3 id="layer-0">레이어 0: 디스커버리</h3>
+          <p><code>/.well-known/pact.json</code>에 위치한 JSON 파일로, 에이전트에게 사이트가 어떤 콘텐츠를 제공하고, 어떤 스키마를 사용하며, 어디서 데이터를 요청할 수 있는지 알려줍니다.</p>
+
+          <h3 id="layer-1">레이어 1: 스키마</h3>
+          <p>모든 PACT 응답은 <code>pact:domain/type@version</code> 형식의 스키마 URI로 데이터 타입을 식별합니다. 에이전트는 이를 통해 추측 없이 구조를 파싱하고 이해합니다.</p>
+
+          <h3 id="layer-2">레이어 2: 데이터</h3>
+          <p>실제 콘텐츠 &mdash; 타입이 지정된 필드가 있는 구조화된 JSON. 최대 토큰 효율성을 위해 객체 모드(<code>items</code> 배열)와 테이블 모드(<code>cols</code> + <code>rows</code>) 모두 지원합니다.</p>
+
+          <h3 id="layer-3">레이어 3: 미디어</h3>
+          <p>미디어 에셋(이미지, 비디오, 문서)은 임베드 대신 URL로 참조되어 응답 페이로드를 작게 유지하고 에이전트가 선택적으로 가져올 수 있게 합니다.</p>
+
+          <h3 id="layer-4">레이어 4: 액션</h3>
+          <p><code>$actions</code> 배열로 사이트가 구매, 예약, 구독 등의 트랜잭션 작업을 정의된 파라미터와 함께 타입이 지정된 엔드포인트로 노출할 수 있습니다.</p>
+
+          <h2 id="discovery">디스커버리 프로토콜</h2>
+          <p>모든 PACT 지원 사이트는 <code>/.well-known/pact.json</code>에 디스커버리 문서를 호스팅합니다. 이것이 AI 에이전트의 진입점입니다.</p>
+
+          <h3>필수 필드</h3>
+          <table>
+            <thead><tr><th>필드</th><th>타입</th><th>설명</th></tr></thead>
+            <tbody>
+              <tr><td><code>pact</code></td><td>string</td><td>프로토콜 버전 (예: "1.0")</td></tr>
+              <tr><td><code>site</code></td><td>string</td><td>도메인 이름 (예: "example.com")</td></tr>
+              <tr><td><code>schemas</code></td><td>string[]</td><td>지원하는 스키마 URI 목록</td></tr>
+              <tr><td><code>endpoints</code></td><td>Record</td><td>스키마 ID를 엔드포인트 정의(list, item, search)에 매핑</td></tr>
+            </tbody>
+          </table>
+
+          <h3>선택 필드</h3>
+          <table>
+            <thead><tr><th>필드</th><th>타입</th><th>설명</th></tr></thead>
+            <tbody>
+              <tr><td><code>description</code></td><td>string</td><td>사이트 설명</td></tr>
+              <tr><td><code>platforms</code></td><td>Record</td><td>플랫폼별 설정 (web, ios, android)</td></tr>
+              <tr><td><code>rate_limit</code></td><td>object</td><td>속도 제한: <code>rpm</code>, <code>burst</code></td></tr>
+              <tr><td><code>auth</code></td><td>object</td><td>인증: <code>type</code>, <code>register</code></td></tr>
+              <tr><td><code>license</code></td><td>object</td><td>사용 조건: <code>ai_input</code>, <code>ai_train</code>, <code>attribution</code></td></tr>
+              <tr><td><code>conformance</code></td><td>string</td><td>자체 선언 등급: L1, L2, L3, L4</td></tr>
+            </tbody>
+          </table>
+
+          <h3>예제</h3>
+          <pre><code>{
+  "pact": "1.0",
+  "site": "store.example.com",
+  "description": "온라인 전자제품 스토어",
+  "schemas": ["pact:commerce/product@1"],
+  "endpoints": {
+    "pact:commerce/product@1": {
+      "list": "/pact/products",
+      "item": "/pact/products/{id}",
+      "search": "/pact/products?q={query}"
+    }
+  },
+  "rate_limit": { "rpm": 60, "burst": 10 },
+  "license": { "ai_input": true, "ai_train": false, "attribution": true }
+}</code></pre>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#layer-0-discovery" target="_blank" rel="noopener">전체 디스커버리 스펙 &rarr;</a>
+
+          <h2 id="schema-system">스키마 시스템</h2>
+          <p>PACT 스키마는 <code>pact:domain/type@version</code> URI 형식을 따르며, 데이터 타입에 대한 범용 명명 규칙을 제공합니다.</p>
+
+          <h3>스키마 URI 형식</h3>
+          <pre><code>pact:domain/type@version
+
+예제:
+  pact:commerce/product@1
+  pact:news/article@1
+  pact:food/restaurant@1
+  pact:media/video@1</code></pre>
+
+          <h3>표준 도메인</h3>
+          <table>
+            <thead><tr><th>도메인</th><th>범위</th><th>예제 타입</th></tr></thead>
+            <tbody>
+              <tr><td><code>commerce</code></td><td>이커머스, 상품</td><td>product, price-comparison, store</td></tr>
+              <tr><td><code>news</code></td><td>기사, 뉴스</td><td>article, headline, feed</td></tr>
+              <tr><td><code>food</code></td><td>음식점, 메뉴</td><td>restaurant, menu, recipe</td></tr>
+              <tr><td><code>local</code></td><td>지역 비즈니스</td><td>business, service, review</td></tr>
+              <tr><td><code>media</code></td><td>미디어 콘텐츠</td><td>video, podcast, channel</td></tr>
+              <tr><td><code>travel</code></td><td>여행, 숙박</td><td>hotel, flight, booking</td></tr>
+              <tr><td><code>events</code></td><td>이벤트, 행사</td><td>event, ticket, venue</td></tr>
+              <tr><td><code>education</code></td><td>교육, 강좌</td><td>course, program, cert</td></tr>
+              <tr><td><code>jobs</code></td><td>채용, 커리어</td><td>posting, company, salary</td></tr>
+            </tbody>
+          </table>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#layer-1-schema" target="_blank" rel="noopener">전체 스키마 스펙 &rarr;</a>
+
+          <h2 id="data-layer">데이터 레이어</h2>
+          <p>PACT 응답은 토큰 효율성을 위해 설계된 최소 엔벨로프 형식을 사용합니다. 두 가지 모드를 지원합니다:</p>
+
+          <h3>객체 모드</h3>
+          <p><code>items</code> 배열이 있는 표준 JSON. 토큰 효율을 위한 압축 키.</p>
+          <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:commerce/product@1",
+  "$t": 1710590400,
+  "$ttl": 300,
+  "items": [
+    { "id": "p1", "n": "위젯", "p": 9.99, "stk": true },
+    { "id": "p2", "n": "가젯", "p": 19.99, "stk": true }
+  ],
+  "total": 2,
+  "page": { "offset": 0, "limit": 20 }
+}</code></pre>
+
+          <h3>테이블 모드</h3>
+          <p>열 + 행으로 최대 압축. 대량의 균일한 데이터셋에 최적.</p>
+          <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:commerce/product@1",
+  "$t": 1710590400,
+  "$layout": "table",
+  "cols": ["id", "n", "p", "stk"],
+  "rows": [
+    ["p1", "위젯", 9.99, true],
+    ["p2", "가젯", 19.99, true]
+  ],
+  "total": 2
+}</code></pre>
+
+          <h3>시스템 필드</h3>
+          <table>
+            <thead><tr><th>필드</th><th>필수</th><th>설명</th></tr></thead>
+            <tbody>
+              <tr><td><code>$pact</code></td><td>예</td><td>프로토콜 버전</td></tr>
+              <tr><td><code>$s</code></td><td>예</td><td>스키마 URI (pact:domain/type@version)</td></tr>
+              <tr><td><code>$t</code></td><td>예</td><td>응답 생성 Unix 타임스탬프</td></tr>
+              <tr><td><code>$ttl</code></td><td>아니오</td><td>캐시 TTL (초)</td></tr>
+              <tr><td><code>$layout</code></td><td>아니오</td><td>열 기반 형식은 "table"로 설정</td></tr>
+              <tr><td><code>total</code></td><td>아니오</td><td>매칭 항목의 총 개수</td></tr>
+              <tr><td><code>page</code></td><td>아니오</td><td>페이지네이션: <code>offset</code>, <code>limit</code>, <code>next</code></td></tr>
+            </tbody>
+          </table>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#layer-2-data" target="_blank" rel="noopener">전체 데이터 레이어 스펙 &rarr;</a>
+
+          <h2 id="actions">액션</h2>
+          <p><code>$actions</code> 배열로 사이트가 PACT 응답 내에 직접 트랜잭션 엔드포인트를 노출할 수 있습니다. AI 에이전트가 사용자를 대신하여 구매, 예약, 구독 등의 작업을 수행할 수 있게 합니다.</p>
+
+          <h3>액션 구조</h3>
+          <p>액션은 스펙에 따라 <code>verb</code> (HTTP 메서드)와 <code>name</code> (액션 식별자)를 사용합니다:</p>
+          <pre><code>{
+  "actions": [
+    {
+      "verb": "POST",
+      "name": "purchase",
+      "description": "장바구니에 추가",
+      "url": "/pact/cart/add",
+      "body": { "product_id": "string", "quantity": "number" },
+      "auth_required": true
+    },
+    {
+      "verb": "POST",
+      "name": "reserve",
+      "description": "예약하기",
+      "url": "/pact/reservations",
+      "body": { "date": "string", "time": "string", "party_size": "number" }
+    }
+  ]
+}</code></pre>
+
+          <h3>표준 액션 타입</h3>
+          <ul>
+            <li><code>purchase</code> &mdash; 상품 또는 서비스 구매</li>
+            <li><code>reserve</code> &mdash; 예약하기</li>
+            <li><code>subscribe</code> &mdash; 구독 시작</li>
+            <li><code>contact</code> &mdash; 메시지 또는 문의 보내기</li>
+            <li><code>bookmark</code> &mdash; 항목 저장 또는 즐겨찾기</li>
+          </ul>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#layer-4-actions" target="_blank" rel="noopener">전체 액션 스펙 &rarr;</a>
+
+          <h2 id="conformance">적합도 등급</h2>
+          <p>PACT는 점진적 채택을 위해 4개의 적합도 등급을 정의합니다. 각 등급은 이전 등급을 포함합니다.</p>
+
+          <table>
+            <thead><tr><th>등급</th><th>이름</th><th>요구사항</th><th>소요 시간</th></tr></thead>
+            <tbody>
+              <tr><td><code>L1</code></td><td>탐색 가능</td><td><code>/.well-known/pact.json</code>에 유효한 <code>pact.json</code></td><td>~5분</td></tr>
+              <tr><td><code>L2</code></td><td>타입 지정</td><td>L1 + 스키마 식별자, <code>$pact</code>와 <code>$s</code>가 포함된 구조화 응답</td><td>~30분</td></tr>
+              <tr><td><code>L3</code></td><td>효율적</td><td>L2 + 테이블 모드, 페이지네이션, 압축</td><td>수 시간</td></tr>
+              <tr><td><code>L4</code></td><td>신뢰</td><td>L3 + 인증, <code>$actions</code>, 라이선스, 에이전트 검증</td><td>수 일</td></tr>
+            </tbody>
+          </table>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#conformance-levels" target="_blank" rel="noopener">전체 적합도 스펙 &rarr;</a>
+
+          <h2 id="cross-platform">크로스 플랫폼 지원</h2>
+          <p>PACT 응답은 <code>$platforms</code> 필드를 사용하여 대상 플랫폼을 선언할 수 있습니다. 에이전트가 가능한 경우 플랫폼별 콘텐츠를 전달할 수 있습니다.</p>
+
+          <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:local/restaurant@1",
+  "$platforms": ["web", "ios", "android"],
+  "items": [...]
+}</code></pre>
+
+          <h3>지원 플랫폼</h3>
+          <ul>
+            <li><code>web</code> &mdash; 브라우저 기반 웹 애플리케이션</li>
+            <li><code>ios</code> &mdash; Apple iOS 애플리케이션</li>
+            <li><code>android</code> &mdash; Android 애플리케이션</li>
+            <li><code>api</code> &mdash; 헤드리스 API 컨슈머</li>
+            <li><code>iot</code> &mdash; IoT 디바이스 및 임베디드 시스템</li>
+          </ul>
+
+          <h2 id="security">보안 고려사항</h2>
+          <p>PACT는 L4 적합도에서 안전한 콘텐츠 전달을 위한 조항을 포함합니다:</p>
+          <ul>
+            <li><strong>인증</strong> &mdash; 보호된 엔드포인트를 위한 API 키, OAuth 2.0, 커스텀 인증</li>
+            <li><strong>에이전트 검증</strong> &mdash; 요청 에이전트의 신원과 권한 확인</li>
+            <li><strong>속도 제한</strong> &mdash; 에이전트 또는 키별 요청 빈도 제어</li>
+            <li><strong>콘텐츠 라이선스</strong> &mdash; 디스커버리에서 사용 조건과 저작자 표시 요구사항 정의</li>
+            <li><strong>HTTPS 필수</strong> &mdash; 모든 PACT 엔드포인트는 TLS 암호화를 사용해야 합니다</li>
+          </ul>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#security" target="_blank" rel="noopener">전체 보안 스펙 &rarr;</a>
+
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="/ko.html">홈</a></li>
+        <li><a href="/playground/ko.html">플레이그라운드</a></li>
+        <li><a href="/score/ko.html">AI 점수</a></li>
+        <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p>Apache 2.0 License &middot; PACT Working Group 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var navLinks = document.querySelectorAll('.docs-nav a');
+      var sections = [];
+      navLinks.forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          var el = document.getElementById(href.slice(1));
+          if (el) sections.push({ link: link, el: el });
+        }
+      });
+      function updateActive() {
+        var scrollY = window.scrollY + 120;
+        var current = null;
+        for (var i = sections.length - 1; i >= 0; i--) {
+          if (sections[i].el.offsetTop <= scrollY) { current = sections[i]; break; }
+        }
+        navLinks.forEach(function(link) { link.classList.remove('active'); });
+        if (current) current.link.classList.add('active');
+      }
+      window.addEventListener('scroll', updateActive, { passive: true });
+      updateActive();
+    })();
+  </script>
+</body>
+</html>

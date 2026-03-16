@@ -1,0 +1,58 @@
+{
+  "$pact": "1.0",
+  "$s": "pact:food/restaurant@1",
+  "$t": 1710576000000,
+  "$ttl": 1800,
+  "items": [
+    {
+      "id": "bella-napoli-downtown",
+      "n": "Bella Napoli",
+      "cui": "Italian",
+      "addr": "142 Main Street, Downtown, NY 10001",
+      "lat": 40.7484,
+      "lng": -73.9856,
+      "r": 4.6,
+      "rv": 328,
+      "pr": "$$",
+      "hrs": {"mon-sun": "11:00-22:00"},
+      "ph": "+1-212-555-0142",
+      "menu": "https://foodguide.example.com/restaurants/bella-napoli-downtown/menu",
+      "dlv": true
+    },
+    {
+      "id": "sakura-sushi-midtown",
+      "n": "Sakura Sushi",
+      "cui": "Japanese",
+      "addr": "89 5th Avenue, Midtown, NY 10022",
+      "lat": 40.7580,
+      "lng": -73.9755,
+      "r": 4.8,
+      "rv": 512,
+      "pr": "$$$",
+      "hrs": {"tue-sun": "12:00-23:00"},
+      "ph": "+1-212-555-0189",
+      "menu": "https://foodguide.example.com/restaurants/sakura-sushi-midtown/menu",
+      "dlv": false
+    },
+    {
+      "id": "green-leaf-bistro",
+      "n": "Green Leaf Bistro",
+      "cui": "Vegetarian",
+      "addr": "55 Park Lane, Upper West Side, NY 10024",
+      "lat": 40.7812,
+      "lng": -73.9726,
+      "r": 4.4,
+      "rv": 195,
+      "pr": "$$",
+      "hrs": {"mon-sat": "08:00-21:00"},
+      "ph": "+1-212-555-0055",
+      "menu": "https://foodguide.example.com/restaurants/green-leaf-bistro/menu",
+      "dlv": true
+    }
+  ],
+  "total": 3,
+  "page": {
+    "offset": 0,
+    "limit": 20
+  }
+}

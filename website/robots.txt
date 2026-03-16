@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+User-agent: PACTAgent
+Allow: /
+
+Sitemap: http://10.125.208.217:8788/sitemap.xml

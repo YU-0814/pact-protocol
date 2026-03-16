@@ -1,0 +1,20 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:education/course@1",
+  "description": "An educational course or training program with instructor, pricing, skill level, topic list, and enrollment action.",
+  "keys": {
+    "t": { "full": "title", "type": "string", "required": true },
+    "prov": { "full": "provider", "type": "string", "required": false },
+    "inst": { "full": "instructor", "type": "string", "required": false },
+    "p": { "full": "price", "type": "number", "required": false },
+    "cur": { "full": "currency", "type": "string", "required": false, "default": "USD" },
+    "dur": { "full": "duration", "type": "string", "required": false },
+    "lvl": { "full": "level", "type": "string", "required": false },
+    "r": { "full": "rating", "type": "number", "required": false, "range": [0, 5] },
+    "rv": { "full": "reviews", "type": "integer", "required": false },
+    "top": { "full": "topics", "type": "array", "required": false },
+    "enroll": { "full": "enroll_url", "type": "url", "required": false, "layer": "action" },
+    "lang": { "full": "language", "type": "string", "required": false },
+    "cert": { "full": "certificate", "type": "boolean", "required": false }
+  }
+}

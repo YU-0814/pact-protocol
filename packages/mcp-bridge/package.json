@@ -1,0 +1,23 @@
+{
+  "name": "@pact-protocol/mcp-bridge",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Bridge MCP servers with PACT data sources",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "pact-mcp": "./dist/server.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@pact-protocol/core": "^1.0.0",
+    "@pact-protocol/client": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}

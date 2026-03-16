@@ -1,0 +1,19 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:media/video@1",
+  "description": "A video content entry with creator attribution, duration, engagement metrics, and platform-specific watch URL.",
+  "keys": {
+    "t": { "full": "title", "type": "string", "required": true },
+    "cr": { "full": "creator", "type": "string", "required": false },
+    "dur": { "full": "duration_sec", "type": "integer", "required": false },
+    "pub": { "full": "published", "type": "string", "required": false },
+    "views": { "full": "views", "type": "integer", "required": false },
+    "likes": { "full": "likes", "type": "integer", "required": false },
+    "desc": { "full": "description", "type": "string", "required": false },
+    "thumb": { "full": "thumbnail", "type": "url", "required": false, "layer": "media" },
+    "url": { "full": "watch_url", "type": "url", "required": false },
+    "plat": { "full": "platform", "type": "string", "required": false },
+    "tags": { "full": "tags", "type": "array", "required": false },
+    "lang": { "full": "language", "type": "string", "required": false }
+  }
+}

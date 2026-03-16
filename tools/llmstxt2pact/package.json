@@ -1,0 +1,10 @@
+{
+  "name": "@pact-protocol/llmstxt2pact",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": { "llmstxt2pact": "./dist/index.js" },
+  "scripts": { "build": "tsc" },
+  "dependencies": { "@pact-protocol/core": "^1.0.0" },
+  "devDependencies": { "typescript": "^5.0.0" }
+}

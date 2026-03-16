@@ -1,0 +1,19 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:local/business@1",
+  "description": "A local business entity with category, contact information, operating hours, and geographic location.",
+  "keys": {
+    "n": { "full": "name", "type": "string", "required": true },
+    "cat": { "full": "category", "type": "string", "required": false },
+    "r": { "full": "rating", "type": "number", "required": false, "range": [0, 5] },
+    "rv": { "full": "reviews", "type": "integer", "required": false },
+    "addr": { "full": "address", "type": "string", "required": false },
+    "ph": { "full": "phone", "type": "string", "required": false },
+    "web": { "full": "website", "type": "url", "required": false },
+    "hrs": { "full": "hours", "type": "object", "required": false },
+    "lat": { "full": "latitude", "type": "number", "required": false },
+    "lng": { "full": "longitude", "type": "number", "required": false },
+    "desc": { "full": "description", "type": "string", "required": false },
+    "img": { "full": "image", "type": "url", "required": false, "layer": "media" }
+  }
+}

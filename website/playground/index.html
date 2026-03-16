@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PACT Playground &mdash; Interactive Validator</title>
+  <meta name="description" content="Paste PACT JSON and validate it interactively. Check conformance levels, catch errors, and explore examples.">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .playground {
+      padding: 2rem 0 4rem;
+    }
+
+    .playground__header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .playground__header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .playground__layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .playground__layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .panel__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: var(--bg-tertiary);
+      border-bottom: 1px solid var(--border);
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .panel__title {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .panel__body {
+      padding: 1rem;
+    }
+
+    #jsonInput {
+      width: 100%;
+      min-height: 420px;
+      background: var(--bg-code);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      resize: vertical;
+      outline: none;
+      line-height: 1.5;
+      tab-size: 2;
+    }
+
+    #jsonInput:focus {
+      border-color: var(--accent);
+    }
+
+    .input-controls {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
+    .type-select {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--bg-code);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.45rem 0.75rem;
+      outline: none;
+    }
+
+    .type-select:focus {
+      border-color: var(--accent);
+    }
+
+    .example-btns {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
+    /* Results */
+    .results-empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .result-summary {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .result-status {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .result-status--valid { color: var(--success); }
+    .result-status--invalid { color: var(--error); }
+
+    .result-section {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-section:last-child {
+      border-bottom: none;
+    }
+
+    .result-section__title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .result-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.35rem 0;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .result-list li .icon {
+      flex-shrink: 0;
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-top: 0.1rem;
+    }
+
+    .icon--pass { color: var(--success); }
+    .icon--fail { color: var(--error); }
+    .icon--warn { color: var(--warning); }
+    .icon--info { color: var(--info); }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo">PACT<span>protocol</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
+      <nav>
+        <ul class="nav">
+          <li><a href="/docs/">Spec</a></li>
+          <li><a href="/playground/" class="active">Playground</a></li>
+          <li><a href="/score/">Score</a></li>
+          <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Main ===== -->
+  <main class="playground">
+    <div class="container">
+      <div class="playground__header">
+        <h1>PACT Playground</h1>
+        <p class="text-muted">Paste PACT JSON to validate structure, detect type, and check conformance level.</p>
+        <p style="font-size:0.8rem;color:var(--text-muted);">English | <a href="/playground/ko.html" style="color:var(--accent);text-decoration:none;">한국어</a></p>
+      </div>
+
+      <div class="playground__layout">
+        <!-- Input Panel -->
+        <div class="panel">
+          <div class="panel__header">
+            <span class="panel__title">Input</span>
+            <select class="type-select" id="typeSelect">
+              <option value="auto">Auto-detect type</option>
+              <option value="discovery">Discovery (pact.json)</option>
+              <option value="response">Response (data)</option>
+            </select>
+          </div>
+          <div class="panel__body">
+            <textarea id="jsonInput" placeholder="Paste your PACT JSON here..." spellcheck="false"></textarea>
+            <div class="input-controls">
+              <button class="btn btn--primary btn--sm" onclick="validate()">Validate</button>
+              <button class="btn btn--ghost btn--sm" onclick="formatJson()">Format</button>
+              <button class="btn btn--ghost btn--sm" onclick="clearInput()">Clear</button>
+            </div>
+            <div class="example-btns">
+              <span class="text-muted text-sm">Try example:</span>
+              <button class="btn btn--ghost btn--sm" onclick="loadExample('discovery')">Discovery</button>
+              <button class="btn btn--ghost btn--sm" onclick="loadExample('blog')">Blog Response</button>
+              <button class="btn btn--ghost btn--sm" onclick="loadExample('restaurant')">Restaurant</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="panel">
+          <div class="panel__header">
+            <span class="panel__title">Results</span>
+            <span id="resultBadge"></span>
+          </div>
+          <div class="panel__body" id="resultsBody">
+            <div class="results-empty">
+              Enter PACT JSON and click <strong>Validate</strong> to see results.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="/docs/">Specification</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p>Apache 2.0 License &middot; PACT Working Group 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // =============================================
+    // PACT Validator (self-contained)
+    // =============================================
+
+    var EXAMPLES = {
+      discovery: {
+        pact: "1.0",
+        site: "pricefinder.kr",
+        description: "AI-friendly price comparison marketplace for Korean markets",
+        schemas: [
+          "pact:commerce/product@1"
+        ],
+        endpoints: {
+          "pact:commerce/product@1": {
+            list: "/pact/products",
+            item: "/pact/products/{id}",
+            search: "/pact/products?q={query}"
+          }
+        },
+        rate_limit: { rpm: 60, burst: 10 },
+        auth: { type: "public" },
+        license: { ai_input: true, ai_train: false, attribution: true },
+        conformance: "L3"
+      },
+
+      blog: {
+        $pact: "1.0",
+        $s: "pact:news/article@1",
+        $t: 1710590400,
+        $ttl: 600,
+        items: [
+          {
+            id: "post-001",
+            n: "Getting Started with PACT Protocol",
+            au: "PACT Team",
+            dt: "2026-03-15",
+            sum: "Learn how to make your content AI-agent friendly in 5 minutes.",
+            url: "/blog/getting-started-with-pact"
+          },
+          {
+            id: "post-002",
+            n: "Why Token Efficiency Matters",
+            au: "PACT Team",
+            dt: "2026-03-10",
+            sum: "HTML wastes 57x more tokens than structured data. Here is why that matters.",
+            url: "/blog/token-efficiency"
+          }
+        ],
+        total: 2,
+        page: { offset: 0, limit: 20 }
+      },
+
+      restaurant: {
+        $pact: "1.0",
+        $s: "pact:food/restaurant@1",
+        $t: 1710590400,
+        $ttl: 3600,
+        items: [
+          {
+            id: "rest-42",
+            n: "Seoul Kitchen",
+            cui: "Korean",
+            r: 4.7,
+            pr: "$$",
+            addr: "123 Gangnam-daero, Seoul",
+            ph: "+82-2-555-0142",
+            hrs: "11:00-22:00"
+          }
+        ],
+        total: 1
+      }
+    };
+
+    // --- Detect Type ---
+    function detectType(obj) {
+      if (obj.pact && obj.site && (obj.schemas || obj.endpoints)) return 'discovery';
+      if (obj.$pact && (obj.$s || obj.$layout)) return 'response';
+      return 'unknown';
+    }
+
+    // --- Validate Discovery ---
+    function validateDiscovery(obj) {
+      var errors = [];
+      var warnings = [];
+      var checks = [];
+
+      // Required: pact version
+      if (!obj.pact) {
+        errors.push('Missing required field: "pact" (version string)');
+        checks.push({ pass: false, text: '"pact" version field' });
+      } else {
+        checks.push({ pass: true, text: '"pact" version: ' + obj.pact });
+      }
+
+      // Required: site (string)
+      if (!obj.site) {
+        errors.push('Missing required field: "site" (domain string)');
+        checks.push({ pass: false, text: '"site" domain' });
+      } else if (typeof obj.site !== 'string') {
+        errors.push('"site" must be a string (domain name), not an object');
+        checks.push({ pass: false, text: '"site" must be a string' });
+      } else {
+        checks.push({ pass: true, text: '"site": ' + obj.site });
+      }
+
+      // Optional: description
+      if (obj.description) {
+        checks.push({ pass: true, text: '"description" provided' });
+      } else {
+        warnings.push('"description" is recommended');
+      }
+
+      // Required: schemas
+      if (!obj.schemas || !Array.isArray(obj.schemas)) {
+        errors.push('Missing or invalid "schemas" array');
+        checks.push({ pass: false, text: '"schemas" array' });
+      } else if (obj.schemas.length === 0) {
+        warnings.push('"schemas" array is empty');
+        checks.push({ pass: true, text: '"schemas" array (empty)' });
+      } else {
+        checks.push({ pass: true, text: '"schemas": ' + obj.schemas.length + ' schema(s)' });
+        obj.schemas.forEach(function(s) {
+          if (!/^pact:[a-z]+\/[a-z0-9-]+@\d+/.test(s)) {
+            warnings.push('Schema "' + s + '" may not follow pact:domain/type@version format');
+          }
+        });
+      }
+
+      // Required: endpoints (Record<string, {list?, item?, search?}>)
+      if (!obj.endpoints || typeof obj.endpoints !== 'object' || Array.isArray(obj.endpoints)) {
+        errors.push('Missing or invalid "endpoints" (must be an object mapping schema IDs to endpoint definitions)');
+        checks.push({ pass: false, text: '"endpoints" object' });
+      } else {
+        var epKeys = Object.keys(obj.endpoints);
+        if (epKeys.length === 0) {
+          warnings.push('"endpoints" is empty');
+        }
+        checks.push({ pass: true, text: '"endpoints": ' + epKeys.length + ' schema(s) mapped' });
+        epKeys.forEach(function(key) {
+          var ep = obj.endpoints[key];
+          if (!ep.list && !ep.item && !ep.search) {
+            warnings.push('Endpoint "' + key + '" has no list/item/search paths');
+          }
+        });
+      }
+
+      // Optional: rate_limit
+      if (obj.rate_limit) {
+        if (obj.rate_limit.rpm) {
+          checks.push({ pass: true, text: '"rate_limit": ' + obj.rate_limit.rpm + ' rpm' });
+        } else {
+          warnings.push('"rate_limit" present but missing "rpm"');
+        }
+      }
+
+      // Optional: auth
+      if (obj.auth) {
+        checks.push({ pass: true, text: '"auth": ' + (obj.auth.type || 'defined') });
+      }
+
+      // Optional: license
+      if (obj.license) {
+        checks.push({ pass: true, text: '"license" defined' });
+      }
+
+      // Optional: conformance
+      if (obj.conformance) {
+        checks.push({ pass: true, text: '"conformance": ' + obj.conformance });
+      }
+
+      // Optional: platforms
+      if (obj.platforms) {
+        checks.push({ pass: true, text: '"platforms": ' + Object.keys(obj.platforms).join(', ') });
+      }
+
+      return { errors: errors, warnings: warnings, checks: checks };
+    }
+
+    // --- Validate Response ---
+    function validateResponse(obj) {
+      var errors = [];
+      var warnings = [];
+      var checks = [];
+
+      // $pact
+      if (!obj.$pact) {
+        errors.push('Missing required field: "$pact" (version string)');
+        checks.push({ pass: false, text: '"$pact" version field' });
+      } else {
+        checks.push({ pass: true, text: '"$pact" version: ' + obj.$pact });
+      }
+
+      // $s (schema)
+      if (!obj.$s) {
+        errors.push('Missing required field: "$s" (schema URI)');
+        checks.push({ pass: false, text: '"$s" schema URI' });
+      } else {
+        checks.push({ pass: true, text: '"$s": ' + obj.$s });
+        if (!/^pact:[a-z]+\/[a-z0-9-]+@\d+/.test(obj.$s)) {
+          warnings.push('"$s" may not follow pact:domain/type@version format');
+        }
+      }
+
+      // $t (timestamp)
+      if (obj.$t) {
+        checks.push({ pass: true, text: '"$t": ' + new Date(obj.$t * 1000).toISOString() });
+      } else {
+        warnings.push('"$t" (Unix timestamp) is recommended');
+      }
+
+      // $ttl (cache)
+      if (obj.$ttl) {
+        checks.push({ pass: true, text: '"$ttl": ' + obj.$ttl + 's cache' });
+      }
+
+      // Table layout
+      var isTable = obj.$layout === 'table';
+      if (isTable) {
+        checks.push({ pass: true, text: '"$layout": table (columnar format)' });
+        if (!obj.cols || !Array.isArray(obj.cols)) {
+          errors.push('Table layout requires "cols" array');
+          checks.push({ pass: false, text: '"cols" array' });
+        } else {
+          checks.push({ pass: true, text: '"cols": ' + obj.cols.length + ' column(s)' });
+        }
+        if (!obj.rows || !Array.isArray(obj.rows)) {
+          errors.push('Table layout requires "rows" array');
+          checks.push({ pass: false, text: '"rows" array' });
+        } else {
+          checks.push({ pass: true, text: '"rows": ' + obj.rows.length + ' row(s)' });
+          if (obj.cols && obj.rows.length > 0 && obj.rows[0].length !== obj.cols.length) {
+            warnings.push('Row length (' + obj.rows[0].length + ') differs from cols length (' + obj.cols.length + ')');
+          }
+        }
+      }
+
+      // items (for non-table)
+      if (!isTable) {
+        if (!obj.items || !Array.isArray(obj.items)) {
+          errors.push('Missing "items" array');
+          checks.push({ pass: false, text: '"items" array' });
+        } else {
+          checks.push({ pass: true, text: '"items": ' + obj.items.length + ' item(s)' });
+        }
+      }
+
+      // total
+      if (typeof obj.total === 'number') {
+        checks.push({ pass: true, text: '"total": ' + obj.total });
+      }
+
+      // page (pagination)
+      if (obj.page) {
+        checks.push({ pass: true, text: '"page": offset=' + (obj.page.offset || 0) + ', limit=' + (obj.page.limit || '?') });
+      }
+
+      return { errors: errors, warnings: warnings, checks: checks };
+    }
+
+    // --- Determine Conformance Level ---
+    function determineConformance(type, obj) {
+      if (type === 'discovery') {
+        var hasBasic = obj.pact && obj.site;
+        var hasSchemas = obj.schemas && obj.schemas.length > 0;
+        var hasEndpoints = obj.endpoints && Object.keys(obj.endpoints).length > 0;
+        var hasSearch = false;
+        if (hasEndpoints) {
+          Object.keys(obj.endpoints).forEach(function(k) {
+            if (obj.endpoints[k].search) hasSearch = true;
+          });
+        }
+        var hasAuth = !!(obj.auth && obj.auth.type && obj.auth.type !== 'public');
+        var hasLicense = !!obj.license;
+
+        if (hasAuth && hasLicense) return 'L4';
+        if (hasSearch && hasEndpoints) return 'L3';
+        if (hasSchemas && hasEndpoints) return 'L2';
+        if (hasBasic) return 'L1';
+        return 'L0';
+      }
+
+      if (type === 'response') {
+        var hasPact = !!obj.$pact;
+        var hasS = !!obj.$s;
+        var hasPage = !!obj.page || obj.$layout === 'table';
+        var hasTtl = typeof obj.$ttl === 'number';
+
+        if (hasPage && hasTtl) return 'L3';
+        if (hasS) return 'L2';
+        if (hasPact) return 'L1';
+        return 'L0';
+      }
+
+      return 'Unknown';
+    }
+
+    // --- Main Validate ---
+    function validate() {
+      var input = document.getElementById('jsonInput').value.trim();
+      var resultsBody = document.getElementById('resultsBody');
+      var badge = document.getElementById('resultBadge');
+
+      if (!input) {
+        showError('Please enter some JSON to validate.');
+        return;
+      }
+
+      var obj;
+      try {
+        obj = JSON.parse(input);
+      } catch (e) {
+        showError('Invalid JSON: ' + e.message);
+        badge.innerHTML = '<span class="badge badge--error">PARSE ERROR</span>';
+        return;
+      }
+
+      var selectedType = document.getElementById('typeSelect').value;
+      var type = selectedType === 'auto' ? detectType(obj) : selectedType;
+
+      if (type === 'unknown') {
+        showError('Could not detect PACT type. Select a type manually or ensure your JSON contains "pact"/"site" (discovery) or "$pact"/"$s" (response) fields.');
+        badge.innerHTML = '<span class="badge badge--warning">UNKNOWN TYPE</span>';
+        return;
+      }
+
+      var result;
+      if (type === 'discovery') {
+        result = validateDiscovery(obj);
+      } else {
+        result = validateResponse(obj);
+      }
+
+      var conformance = determineConformance(type, obj);
+      var isValid = result.errors.length === 0;
+
+      // Build results HTML
+      var html = '';
+
+      // Summary
+      html += '<div class="result-summary">';
+      if (isValid) {
+        html += '<span class="result-status result-status--valid">VALID</span>';
+        badge.innerHTML = '<span class="badge">VALID</span>';
+      } else {
+        html += '<span class="result-status result-status--invalid">INVALID</span>';
+        badge.innerHTML = '<span class="badge badge--error">INVALID</span>';
+      }
+      html += '<span class="badge badge--info">' + type.toUpperCase() + '</span>';
+      html += '<span class="badge">' + conformance + '</span>';
+      html += '</div>';
+
+      // Checks
+      html += '<div class="result-section">';
+      html += '<div class="result-section__title">Structure Checks</div>';
+      html += '<ul class="result-list">';
+      result.checks.forEach(function(c) {
+        var cls = c.pass ? 'icon--pass' : 'icon--fail';
+        var sym = c.pass ? '[ok]' : '[!!]';
+        html += '<li><span class="icon ' + cls + '">' + sym + '</span> ' + escapeHtml(c.text) + '</li>';
+      });
+      html += '</ul></div>';
+
+      // Errors
+      if (result.errors.length > 0) {
+        html += '<div class="result-section">';
+        html += '<div class="result-section__title">Errors (' + result.errors.length + ')</div>';
+        html += '<ul class="result-list">';
+        result.errors.forEach(function(e) {
+          html += '<li><span class="icon icon--fail">[!!]</span> ' + escapeHtml(e) + '</li>';
+        });
+        html += '</ul></div>';
+      }
+
+      // Warnings
+      if (result.warnings.length > 0) {
+        html += '<div class="result-section">';
+        html += '<div class="result-section__title">Warnings (' + result.warnings.length + ')</div>';
+        html += '<ul class="result-list">';
+        result.warnings.forEach(function(w) {
+          html += '<li><span class="icon icon--warn">[~]</span> ' + escapeHtml(w) + '</li>';
+        });
+        html += '</ul></div>';
+      }
+
+      // Conformance
+      html += '<div class="result-section">';
+      html += '<div class="result-section__title">Conformance Level</div>';
+      html += '<p style="font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--accent);">' + conformance + '</p>';
+      var conformanceLabels = { L0: 'Not conformant', L1: 'Discoverable', L2: 'Typed', L3: 'Efficient', L4: 'Trusted' };
+      html += '<p class="text-muted text-sm mt-1">' + (conformanceLabels[conformance] || '') + '</p>';
+      html += '</div>';
+
+      resultsBody.innerHTML = html;
+    }
+
+    function showError(msg) {
+      var resultsBody = document.getElementById('resultsBody');
+      resultsBody.innerHTML =
+        '<div class="result-section">' +
+        '<p style="color:var(--error);font-size:0.9rem;">' + escapeHtml(msg) + '</p>' +
+        '</div>';
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    function loadExample(name) {
+      var example = EXAMPLES[name];
+      if (!example) return;
+      document.getElementById('jsonInput').value = JSON.stringify(example, null, 2);
+      document.getElementById('typeSelect').value = 'auto';
+      validate();
+    }
+
+    function formatJson() {
+      var input = document.getElementById('jsonInput');
+      try {
+        var obj = JSON.parse(input.value);
+        input.value = JSON.stringify(obj, null, 2);
+      } catch (e) {
+        showError('Cannot format: invalid JSON.');
+      }
+    }
+
+    function clearInput() {
+      document.getElementById('jsonInput').value = '';
+      document.getElementById('resultsBody').innerHTML =
+        '<div class="results-empty">Enter PACT JSON and click <strong>Validate</strong> to see results.</div>';
+      document.getElementById('resultBadge').innerHTML = '';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:food/restaurant@1",
+  "description": "A restaurant or food establishment with cuisine type, ratings, operating hours, and reservation or delivery capabilities.",
+  "keys": {
+    "n": { "full": "name", "type": "string", "required": true },
+    "cui": { "full": "cuisine", "type": "string", "required": false },
+    "r": { "full": "rating", "type": "number", "required": false, "range": [0, 5] },
+    "rv": { "full": "reviews", "type": "integer", "required": false },
+    "pr": { "full": "price_range", "type": "string", "required": false },
+    "addr": { "full": "address", "type": "string", "required": false },
+    "ph": { "full": "phone", "type": "string", "required": false },
+    "hrs": { "full": "hours", "type": "object", "required": false },
+    "menu": { "full": "menu_url", "type": "url", "required": false },
+    "rsv": { "full": "reserve_url", "type": "url", "required": false, "layer": "action" },
+    "dlv": { "full": "delivery", "type": "boolean", "required": false },
+    "lat": { "full": "latitude", "type": "number", "required": false },
+    "lng": { "full": "longitude", "type": "number", "required": false }
+  }
+}

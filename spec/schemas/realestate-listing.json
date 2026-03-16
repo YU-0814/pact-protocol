@@ -1,0 +1,22 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:realestate/listing@1",
+  "description": "A real estate property listing for sale or rent, with physical attributes, location coordinates, and agent contact information.",
+  "keys": {
+    "t": { "full": "title", "type": "string", "required": true },
+    "p": { "full": "price", "type": "number", "required": true },
+    "cur": { "full": "currency", "type": "string", "required": false, "default": "USD" },
+    "typ": { "full": "type", "type": "string", "required": true },
+    "pt": { "full": "property_type", "type": "string", "required": false },
+    "bed": { "full": "bedrooms", "type": "integer", "required": false },
+    "bath": { "full": "bathrooms", "type": "integer", "required": false },
+    "area": { "full": "area_sqm", "type": "number", "required": false },
+    "addr": { "full": "address", "type": "string", "required": false },
+    "lat": { "full": "latitude", "type": "number", "required": false },
+    "lng": { "full": "longitude", "type": "number", "required": false },
+    "img": { "full": "image", "type": "url", "required": false, "layer": "media" },
+    "desc": { "full": "description", "type": "string", "required": false },
+    "agt": { "full": "agent", "type": "string", "required": false },
+    "url": { "full": "listing_url", "type": "url", "required": false }
+  }
+}

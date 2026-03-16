@@ -1,0 +1,14 @@
+# TechBlog
+
+> A technology blog covering AI, cloud, and software engineering.
+
+## Articles
+Our latest articles on technology trends.
+Browse all posts at https://techblog.example.com/articles
+
+## API
+- Articles endpoint: https://techblog.example.com/api/articles
+- Search: https://techblog.example.com/api/search?q=
+
+## About
+TechBlog was founded in 2020. Contact us at hello@techblog.example.com

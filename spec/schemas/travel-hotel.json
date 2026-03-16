@@ -1,0 +1,21 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:travel/hotel@1",
+  "description": "A hotel or accommodation listing with star classification, nightly pricing, amenities, and booking capabilities.",
+  "keys": {
+    "n": { "full": "name", "type": "string", "required": true },
+    "str": { "full": "stars", "type": "integer", "required": false, "range": [1, 5] },
+    "r": { "full": "rating", "type": "number", "required": false, "range": [0, 5] },
+    "rv": { "full": "reviews", "type": "integer", "required": false },
+    "ppn": { "full": "price_per_night", "type": "number", "required": false },
+    "cur": { "full": "currency", "type": "string", "required": false, "default": "USD" },
+    "addr": { "full": "address", "type": "string", "required": false },
+    "lat": { "full": "latitude", "type": "number", "required": false },
+    "lng": { "full": "longitude", "type": "number", "required": false },
+    "amen": { "full": "amenities", "type": "array", "required": false },
+    "img": { "full": "image", "type": "url", "required": false, "layer": "media" },
+    "book": { "full": "book_url", "type": "url", "required": false, "layer": "action" },
+    "ci": { "full": "check_in", "type": "string", "required": false },
+    "co": { "full": "check_out", "type": "string", "required": false }
+  }
+}

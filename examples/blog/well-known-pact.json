@@ -1,0 +1,16 @@
+{
+  "pact": "1.0",
+  "site": "techblog.example.com",
+  "description": "A tech blog covering software engineering, AI, and cloud computing",
+  "schemas": ["pact:news/article@1"],
+  "endpoints": {
+    "pact:news/article@1": {
+      "list": "/pact/articles",
+      "item": "/pact/articles/{id}",
+      "search": "/pact/articles?q={query}"
+    }
+  },
+  "rate_limit": { "rpm": 120, "burst": 20 },
+  "auth": { "type": "public" },
+  "license": { "ai_input": true, "ai_train": true, "attribution": true }
+}

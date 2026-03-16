@@ -1,0 +1,14 @@
+{
+  "pact": "1.0",
+  "site": "pact-protocol.org",
+  "description": "Official PACT Protocol website - specification, playground, and tools for AI agent content delivery",
+  "schemas": ["pact:content/documentation@1"],
+  "endpoints": {
+    "pact:content/documentation@1": {
+      "list": "/docs/",
+      "search": "/playground/"
+    }
+  },
+  "license": { "ai_input": true, "ai_train": true, "attribution": true },
+  "conformance": "L1"
+}

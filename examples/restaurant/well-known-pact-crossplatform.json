@@ -1,0 +1,34 @@
+{
+  "pact": "1.0",
+  "site": "seoleats.example.com",
+  "description": "Seoul restaurant discovery — web, iOS, and Android",
+  "schemas": ["pact:food/restaurant@1"],
+  "endpoints": {
+    "pact:food/restaurant@1": {
+      "list": "/pact/restaurants",
+      "item": "/pact/restaurants/{id}",
+      "search": "/pact/restaurants?q={query}"
+    }
+  },
+  "platforms": {
+    "web": {
+      "base_url": "https://seoleats.example.com"
+    },
+    "ios": {
+      "bundle_id": "com.seoleats.app",
+      "universal_link": "https://seoleats.example.com",
+      "app_store": "https://apps.apple.com/app/id123456789",
+      "min_version": "3.0"
+    },
+    "android": {
+      "package": "com.seoleats.app",
+      "app_link": "https://seoleats.example.com",
+      "play_store": "https://play.google.com/store/apps/details?id=com.seoleats.app",
+      "min_version": "3.0"
+    }
+  },
+  "rate_limit": {"rpm": 60, "burst": 10},
+  "auth": {"type": "api_key", "register": "https://seoleats.example.com/developers"},
+  "license": {"ai_input": true, "ai_train": false, "attribution": true},
+  "conformance": "L4"
+}

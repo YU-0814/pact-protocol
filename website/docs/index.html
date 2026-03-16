@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PACT Specification &mdash; Protocol for Agent Content Transfer</title>
+  <meta name="description" content="PACT Protocol specification: architecture, discovery, schema system, data layer, actions, and conformance levels.">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .docs-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 2rem;
+      padding: 2rem 0 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .docs-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .docs-sidebar {
+        position: static !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Sidebar */
+    .docs-sidebar {
+      position: sticky;
+      top: 5rem;
+      border-right: 1px solid var(--border);
+      padding-right: 1.5rem;
+      max-height: calc(100vh - 6rem);
+      overflow-y: auto;
+    }
+
+    .docs-sidebar__title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+
+    .docs-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .docs-nav li {
+      margin-bottom: 0.15rem;
+    }
+
+    .docs-nav a {
+      display: block;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      transition: all var(--transition);
+      border-left: 2px solid transparent;
+    }
+
+    .docs-nav a:hover {
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .docs-nav a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .docs-nav .sub {
+      padding-left: 1.5rem;
+    }
+
+    .docs-nav .sub a {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.75rem;
+    }
+
+    /* Main Content */
+    .docs-content {
+      max-width: var(--content-width);
+      min-width: 0;
+    }
+
+    .docs-content h1 {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .docs-content h2 {
+      font-size: 1.5rem;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .docs-content h2:first-of-type {
+      border-top: none;
+      margin-top: 2rem;
+      padding-top: 0;
+    }
+
+    .docs-content h3 {
+      font-size: 1.15rem;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .docs-content p {
+      margin-bottom: 1rem;
+    }
+
+    .docs-content ul, .docs-content ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    .docs-content li {
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .docs-content pre {
+      margin-bottom: 1.5rem;
+    }
+
+    .docs-content code {
+      font-size: 0.85em;
+    }
+
+    .docs-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .docs-content th, .docs-content td {
+      text-align: left;
+      padding: 0.6rem 0.85rem;
+      border: 1px solid var(--border);
+    }
+
+    .docs-content th {
+      background: var(--bg-tertiary);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .docs-content td {
+      color: var(--text-secondary);
+    }
+
+    .spec-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+
+    .spec-link:hover {
+      color: var(--accent-hover);
+    }
+
+    .callout {
+      background: var(--accent-dim);
+      border: 1px solid rgba(0, 212, 170, 0.25);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .callout p {
+      color: var(--text-primary);
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .callout code {
+      background: rgba(0, 212, 170, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo">PACT<span>protocol</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
+      <nav>
+        <ul class="nav">
+          <li><a href="/docs/" class="active">Spec</a></li>
+          <li><a href="/playground/">Playground</a></li>
+          <li><a href="/score/">Score</a></li>
+          <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Main ===== -->
+  <main>
+    <div class="container">
+      <div class="docs-layout">
+
+        <!-- Sidebar -->
+        <aside class="docs-sidebar">
+          <div class="docs-sidebar__title">Specification</div>
+          <ul class="docs-nav" id="docsNav">
+            <li><a href="#overview" class="active">Overview</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li class="sub"><a href="#layer-0">Layer 0: Discovery</a></li>
+            <li class="sub"><a href="#layer-1">Layer 1: Schema</a></li>
+            <li class="sub"><a href="#layer-2">Layer 2: Data</a></li>
+            <li class="sub"><a href="#layer-3">Layer 3: Media</a></li>
+            <li class="sub"><a href="#layer-4">Layer 4: Actions</a></li>
+            <li><a href="#discovery">Discovery Protocol</a></li>
+            <li><a href="#schema-system">Schema System</a></li>
+            <li><a href="#data-layer">Data Layer</a></li>
+            <li><a href="#actions">Actions</a></li>
+            <li><a href="#conformance">Conformance Levels</a></li>
+            <li><a href="#cross-platform">Cross-Platform</a></li>
+            <li><a href="#security">Security</a></li>
+          </ul>
+        </aside>
+
+        <!-- Content -->
+        <article class="docs-content">
+          <h1>PACT Protocol Specification</h1>
+          <p>Version 1.0 &mdash; PACT Working Group 2026</p>
+          <p style="font-size:0.8rem;color:var(--text-muted);"><a href="/docs/ko.html" style="color:var(--accent);text-decoration:none;">한국어</a> | English</p>
+
+          <div class="callout">
+            <p>This is a summary of the PACT specification. For the full normative spec, see the <a href="https://github.com/pact-protocol/pact-protocol/tree/main/spec" target="_blank" rel="noopener">GitHub repository</a>.</p>
+          </div>
+
+          <!-- Overview -->
+          <h2 id="overview">Overview</h2>
+          <p>PACT (Protocol for Agent Content Transfer) is an open standard for serving structured, token-efficient content to AI agents. It fills the gap between discovery standards (robots.txt, llms.txt) and interaction protocols (MCP, A2A).</p>
+          <p>Where <strong>MCP</strong> gives AI agents tools and <strong>A2A</strong> connects agents together, PACT solves the content delivery problem: how do websites serve their actual data (products, articles, listings) to AI agents in a format that is compact, typed, and actionable?</p>
+
+          <h3>Design Principles</h3>
+          <ul>
+            <li><strong>Token efficiency</strong> &mdash; minimize tokens consumed by AI models (57x reduction vs HTML)</li>
+            <li><strong>Progressive adoption</strong> &mdash; start with a single JSON file, grow incrementally</li>
+            <li><strong>Schema-driven</strong> &mdash; typed data with versioned schemas for reliable parsing</li>
+            <li><strong>Publisher control</strong> &mdash; site owners define terms, pricing, and access rules</li>
+            <li><strong>Cross-platform</strong> &mdash; works on web, mobile, IoT &mdash; anywhere HTTP speaks</li>
+          </ul>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md" target="_blank" rel="noopener">Full spec on GitHub &rarr;</a>
+
+          <!-- Architecture -->
+          <h2 id="architecture">Architecture</h2>
+          <p>PACT uses a 5-layer stack, where each layer builds on the previous one. Implementations can adopt layers incrementally.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Name</th>
+                <th>Purpose</th>
+                <th>Key File / Field</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>0</code></td>
+                <td>Discovery</td>
+                <td>Agents find your PACT endpoints</td>
+                <td><code>/.well-known/pact.json</code></td>
+              </tr>
+              <tr>
+                <td><code>1</code></td>
+                <td>Schema</td>
+                <td>Data types are identified and versioned</td>
+                <td><code>pact:domain/type@version</code></td>
+              </tr>
+              <tr>
+                <td><code>2</code></td>
+                <td>Data</td>
+                <td>Structured JSON content responses</td>
+                <td><code>$pact</code>, <code>$s</code>, <code>items</code></td>
+              </tr>
+              <tr>
+                <td><code>3</code></td>
+                <td>Media</td>
+                <td>Image and video references</td>
+                <td>URL pointers in data fields</td>
+              </tr>
+              <tr>
+                <td><code>4</code></td>
+                <td>Actions</td>
+                <td>Transactional operations</td>
+                <td><code>$actions</code> array</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 id="layer-0">Layer 0: Discovery</h3>
+          <p>A JSON file at <code>/.well-known/pact.json</code> tells agents what content your site offers, what schemas it uses, and where to request data.</p>
+
+          <h3 id="layer-1">Layer 1: Schema</h3>
+          <p>Every PACT response identifies its data type using a schema URI in the format <code>pact:domain/type@version</code>. Agents use this to parse and understand the structure without guessing.</p>
+
+          <h3 id="layer-2">Layer 2: Data</h3>
+          <p>The actual content &mdash; structured JSON with typed fields. Supports both object mode (<code>items</code> array) and tabular mode (<code>cols</code> + <code>rows</code>) for maximum token efficiency.</p>
+
+          <h3 id="layer-3">Layer 3: Media</h3>
+          <p>Media assets (images, videos, documents) are referenced by URL rather than embedded, keeping response payloads small and letting agents selectively fetch what they need.</p>
+
+          <h3 id="layer-4">Layer 4: Actions</h3>
+          <p>The <code>$actions</code> array lets sites expose transactional operations &mdash; purchase, reserve, subscribe, etc. &mdash; as typed endpoints with defined parameters.</p>
+
+          <!-- Discovery -->
+          <h2 id="discovery">Discovery Protocol</h2>
+          <p>Every PACT-enabled site hosts a discovery document at <code>/.well-known/pact.json</code>. This is the entry point for AI agents.</p>
+
+          <h3>Required Fields</h3>
+          <table>
+            <thead>
+              <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>pact</code></td><td>string</td><td>Protocol version (e.g., "1.0")</td></tr>
+              <tr><td><code>site</code></td><td>string</td><td>Domain name (e.g., "example.com")</td></tr>
+              <tr><td><code>schemas</code></td><td>string[]</td><td>List of supported schema URIs</td></tr>
+              <tr><td><code>endpoints</code></td><td>Record</td><td>Map of schema IDs to endpoint definitions (list, item, search)</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Optional Fields</h3>
+          <table>
+            <thead>
+              <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>description</code></td><td>string</td><td>Human-readable site description</td></tr>
+              <tr><td><code>platforms</code></td><td>Record</td><td>Platform-specific config (web, ios, android)</td></tr>
+              <tr><td><code>rate_limit</code></td><td>object</td><td>Rate limiting: <code>rpm</code>, <code>burst</code></td></tr>
+              <tr><td><code>auth</code></td><td>object</td><td>Authentication: <code>type</code>, <code>register</code></td></tr>
+              <tr><td><code>license</code></td><td>object</td><td>Usage terms: <code>ai_input</code>, <code>ai_train</code>, <code>attribution</code></td></tr>
+              <tr><td><code>conformance</code></td><td>string</td><td>Self-declared level: L1, L2, L3, or L4</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Example</h3>
+          <pre><code>{
+  "pact": "1.0",
+  "site": "store.example.com",
+  "description": "Online electronics store",
+  "schemas": ["pact:commerce/product@1"],
+  "endpoints": {
+    "pact:commerce/product@1": {
+      "list": "/pact/products",
+      "item": "/pact/products/{id}",
+      "search": "/pact/products?q={query}"
+    }
+  },
+  "rate_limit": { "rpm": 60, "burst": 10 },
+  "license": { "ai_input": true, "ai_train": false, "attribution": true }
+}</code></pre>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#layer-0-discovery" target="_blank" rel="noopener">Full discovery spec &rarr;</a>
+
+          <!-- Schema System -->
+          <h2 id="schema-system">Schema System</h2>
+          <p>PACT schemas follow the URI format <code>pact:domain/type@version</code>, providing a universal naming convention for data types.</p>
+
+          <h3>Schema URI Format</h3>
+          <pre><code>pact:domain/type@version
+
+Examples:
+  pact:commerce/product@1
+  pact:content/article@1
+  pact:local/restaurant@1
+  pact:media/video@1</code></pre>
+
+          <h3>Standard Domains</h3>
+          <table>
+            <thead>
+              <tr><th>Domain</th><th>Covers</th><th>Example Types</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>commerce</code></td><td>E-commerce, products</td><td>product, price-comparison, store</td></tr>
+              <tr><td><code>content</code></td><td>Articles, blogs, docs</td><td>article, blog-post, documentation</td></tr>
+              <tr><td><code>local</code></td><td>Local businesses</td><td>restaurant, hotel, service</td></tr>
+              <tr><td><code>media</code></td><td>Media content</td><td>video, podcast, image-gallery</td></tr>
+              <tr><td><code>social</code></td><td>Social platforms</td><td>profile, post, event</td></tr>
+            </tbody>
+          </table>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#layer-1-schema" target="_blank" rel="noopener">Full schema spec &rarr;</a>
+
+          <!-- Data Layer -->
+          <h2 id="data-layer">Data Layer</h2>
+          <p>PACT responses use a minimal envelope format designed for token efficiency. Two modes are supported:</p>
+
+          <h3>Object Mode</h3>
+          <p>Standard JSON with an <code>items</code> array. Compressed keys for token efficiency.</p>
+          <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:commerce/product@1",
+  "$t": 1710590400,
+  "$ttl": 300,
+  "items": [
+    { "id": "p1", "n": "Widget", "p": 9.99, "stk": true },
+    { "id": "p2", "n": "Gadget", "p": 19.99, "stk": true }
+  ],
+  "total": 2,
+  "page": { "offset": 0, "limit": 20 }
+}</code></pre>
+
+          <h3>Tabular Mode</h3>
+          <p>Columns + rows for maximum compression. Best for large, uniform datasets.</p>
+          <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:commerce/product@1",
+  "$t": 1710590400,
+  "$layout": "table",
+  "cols": ["id", "n", "p", "stk"],
+  "rows": [
+    ["p1", "Widget", 9.99, true],
+    ["p2", "Gadget", 19.99, true]
+  ],
+  "total": 2
+}</code></pre>
+
+          <h3>System Fields</h3>
+          <table>
+            <thead>
+              <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>$pact</code></td><td>Yes</td><td>Protocol version</td></tr>
+              <tr><td><code>$s</code></td><td>Yes</td><td>Schema URI (pact:domain/type@version)</td></tr>
+              <tr><td><code>$t</code></td><td>Yes</td><td>Unix timestamp of response generation</td></tr>
+              <tr><td><code>$ttl</code></td><td>No</td><td>Cache TTL in seconds</td></tr>
+              <tr><td><code>$layout</code></td><td>No</td><td>Set to "table" for columnar format</td></tr>
+              <tr><td><code>total</code></td><td>No</td><td>Total count of matching items</td></tr>
+              <tr><td><code>page</code></td><td>No</td><td>Pagination: <code>offset</code>, <code>limit</code>, <code>next</code></td></tr>
+            </tbody>
+          </table>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#layer-2-data" target="_blank" rel="noopener">Full data layer spec &rarr;</a>
+
+          <!-- Actions -->
+          <h2 id="actions">Actions</h2>
+          <p>The <code>$actions</code> array lets sites expose transactional endpoints directly within PACT responses. This allows AI agents to perform operations like purchasing, reserving, or subscribing on behalf of users.</p>
+
+          <h3>Action Structure</h3>
+          <p>Actions use <code>verb</code> (HTTP method) and <code>name</code> (action identifier) per the spec:</p>
+          <pre><code>{
+  "actions": [
+    {
+      "verb": "POST",
+      "name": "purchase",
+      "description": "Add to cart",
+      "url": "/pact/cart/add",
+      "body": { "product_id": "string", "quantity": "number" },
+      "auth_required": true
+    },
+    {
+      "verb": "POST",
+      "name": "reserve",
+      "description": "Make a reservation",
+      "url": "/pact/reservations",
+      "body": { "date": "string", "time": "string", "party_size": "number" }
+    }
+  ]
+}</code></pre>
+
+          <h3>Standard Action Types</h3>
+          <ul>
+            <li><code>purchase</code> &mdash; buy a product or service</li>
+            <li><code>reserve</code> &mdash; make a reservation</li>
+            <li><code>subscribe</code> &mdash; start a subscription</li>
+            <li><code>contact</code> &mdash; send a message or inquiry</li>
+            <li><code>bookmark</code> &mdash; save or favorite an item</li>
+          </ul>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#layer-4-actions" target="_blank" rel="noopener">Full actions spec &rarr;</a>
+
+          <!-- Conformance -->
+          <h2 id="conformance">Conformance Levels</h2>
+          <p>PACT defines four conformance levels to support progressive adoption. Each level builds on the previous.</p>
+
+          <table>
+            <thead>
+              <tr><th>Level</th><th>Name</th><th>Requirements</th><th>Effort</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>L1</code></td>
+                <td>Discoverable</td>
+                <td>Valid <code>pact.json</code> at <code>/.well-known/pact.json</code></td>
+                <td>~5 minutes</td>
+              </tr>
+              <tr>
+                <td><code>L2</code></td>
+                <td>Typed</td>
+                <td>L1 + schema identifiers, structured responses with <code>$pact</code> and <code>$s</code></td>
+                <td>~30 minutes</td>
+              </tr>
+              <tr>
+                <td><code>L3</code></td>
+                <td>Efficient</td>
+                <td>L2 + tabular mode, pagination (<code>$meta</code>), compression</td>
+                <td>Hours</td>
+              </tr>
+              <tr>
+                <td><code>L4</code></td>
+                <td>Trusted</td>
+                <td>L3 + authentication, <code>$actions</code>, licensing, agent verification</td>
+                <td>Days</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#conformance-levels" target="_blank" rel="noopener">Full conformance spec &rarr;</a>
+
+          <!-- Cross-Platform -->
+          <h2 id="cross-platform">Cross-Platform Support</h2>
+          <p>PACT responses can declare target platforms using the <code>$platforms</code> field. This enables agents to deliver platform-specific content when available.</p>
+
+          <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:local/restaurant@1",
+  "$platforms": ["web", "ios", "android"],
+  "items": [...]
+}</code></pre>
+
+          <h3>Supported Platforms</h3>
+          <ul>
+            <li><code>web</code> &mdash; browser-based web applications</li>
+            <li><code>ios</code> &mdash; Apple iOS applications</li>
+            <li><code>android</code> &mdash; Android applications</li>
+            <li><code>api</code> &mdash; headless API consumers</li>
+            <li><code>iot</code> &mdash; IoT devices and embedded systems</li>
+          </ul>
+
+          <!-- Security -->
+          <h2 id="security">Security Considerations</h2>
+          <p>PACT includes provisions for secure content delivery at L4 conformance:</p>
+          <ul>
+            <li><strong>Authentication</strong> &mdash; API key, OAuth 2.0, or custom auth for protected endpoints</li>
+            <li><strong>Agent verification</strong> &mdash; verify the identity and permissions of requesting agents</li>
+            <li><strong>Rate limiting</strong> &mdash; control request frequency per agent or key</li>
+            <li><strong>Content licensing</strong> &mdash; define usage terms and attribution requirements in discovery</li>
+            <li><strong>HTTPS required</strong> &mdash; all PACT endpoints should use TLS encryption</li>
+          </ul>
+
+          <a class="spec-link" href="https://github.com/pact-protocol/pact-protocol/blob/main/spec/SPEC.md#security" target="_blank" rel="noopener">Full security spec &rarr;</a>
+
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/playground/">Playground</a></li>
+        <li><a href="/score/">AI Score</a></li>
+        <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p>Apache 2.0 License &middot; PACT Working Group 2026</p>
+    </div>
+  </footer>
+
+  <!-- Sidebar scroll-spy -->
+  <script>
+    (function() {
+      var navLinks = document.querySelectorAll('.docs-nav a');
+      var sections = [];
+
+      navLinks.forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          var el = document.getElementById(href.slice(1));
+          if (el) sections.push({ link: link, el: el });
+        }
+      });
+
+      function updateActive() {
+        var scrollY = window.scrollY + 120;
+        var current = null;
+
+        for (var i = sections.length - 1; i >= 0; i--) {
+          if (sections[i].el.offsetTop <= scrollY) {
+            current = sections[i];
+            break;
+          }
+        }
+
+        navLinks.forEach(function(link) { link.classList.remove('active'); });
+        if (current) current.link.classList.add('active');
+      }
+
+      window.addEventListener('scroll', updateActive, { passive: true });
+      updateActive();
+    })();
+  </script>
+</body>
+</html>

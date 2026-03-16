@@ -1,0 +1,21 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:events/event@1",
+  "description": "An event listing with date range, venue details, geographic coordinates, pricing, and ticket purchase action.",
+  "keys": {
+    "t": { "full": "title", "type": "string", "required": true },
+    "ds": { "full": "date_start", "type": "string", "required": true },
+    "de": { "full": "date_end", "type": "string", "required": false },
+    "ven": { "full": "venue", "type": "string", "required": false },
+    "addr": { "full": "address", "type": "string", "required": false },
+    "lat": { "full": "latitude", "type": "number", "required": false },
+    "lng": { "full": "longitude", "type": "number", "required": false },
+    "p": { "full": "price", "type": "number", "required": false },
+    "cur": { "full": "currency", "type": "string", "required": false, "default": "USD" },
+    "cat": { "full": "category", "type": "string", "required": false },
+    "desc": { "full": "description", "type": "string", "required": false },
+    "tix": { "full": "ticket_url", "type": "url", "required": false, "layer": "action" },
+    "img": { "full": "image", "type": "url", "required": false, "layer": "media" },
+    "org": { "full": "organizer", "type": "string", "required": false }
+  }
+}

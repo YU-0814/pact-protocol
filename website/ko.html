@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PACT 프로토콜 — AI 에이전트 콘텐츠 전송 표준</title>
+  <meta name="description" content="PACT는 AI 에이전트에게 구조화된, 토큰 효율적인 콘텐츠를 제공합니다. HTML 대비 57배 효율적.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="/ko.html" class="logo">PACT<span>protocol</span></a>
+      <button class="nav-toggle" aria-label="메뉴" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
+      <nav><ul class="nav">
+        <li><a href="/docs/ko.html">스펙</a></li>
+        <li><a href="/playground/ko.html">플레이그라운드</a></li>
+        <li><a href="/score/ko.html">점수</a></li>
+        <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+      </ul></nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero hero--new">
+    <canvas id="heroCanvas" class="hero__canvas"></canvas>
+    <div class="hero__glow"></div>
+    <div class="container" style="position:relative;z-index:1;">
+      <div class="hero__badge anim"><span class="badge">v1.0 스펙 공개</span></div>
+      <h1 class="hero__title anim">AI 에이전트를 위한<br><span class="hero__title-gradient">콘텐츠 전송 표준</span></h1>
+      <p class="hero__subtitle anim">PACT는 구조화된, 토큰 효율적인 데이터를 AI 에이전트에게 전달합니다. HTML 대비 57배 효율적.</p>
+      <p class="hero__tagline anim">AI 에이전트와 PACT를 맺으세요. 조건은 당신이 정합니다.</p>
+      <p class="hero__lang anim"><a href="/">English</a> | 한국어</p>
+      <div class="hero__actions anim">
+        <a href="/docs/ko.html" class="btn btn--primary btn--lg">스펙 읽기</a>
+        <a href="/playground/ko.html" class="btn btn--secondary btn--lg">플레이그라운드</a>
+        <a href="#demo" class="btn btn--ghost btn--lg">데모 보기</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Missing Layer -->
+  <section class="section section--alt">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">스택의 빈자리</p>
+      <h2 class="section__title anim">빠진 레이어</h2>
+      <p class="section__subtitle anim">MCP는 AI에 도구를. A2A는 에이전트를 연결. <strong>PACT는 콘텐츠를 전달합니다.</strong></p>
+      <div class="anim" style="max-width:500px;margin:2rem auto 0;font-family:var(--font-mono);font-size:0.82rem;color:var(--text-muted);line-height:2.2;text-align:center;">
+        <div>robots.txt</div><div style="font-size:0.65rem;">|</div>
+        <div>llms.txt</div><div style="font-size:0.65rem;">|</div>
+        <div>Schema.org</div><div style="font-size:0.65rem;">|</div>
+        <div style="color:var(--accent);font-weight:700;font-size:1rem;padding:0.5rem 0;border:1px solid rgba(0,212,170,0.3);border-radius:var(--radius);background:var(--accent-dim);margin:0.25rem auto;max-width:300px;">PACT &mdash; 이 빈자리를 채웁니다</div>
+        <div style="font-size:0.65rem;">|</div>
+        <div>MCP (Model Context Protocol)</div><div style="font-size:0.65rem;">|</div>
+        <div>A2A (Agent-to-Agent)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">아키텍처</p>
+      <h2 class="section__title anim">5단계 스택</h2>
+      <p class="section__subtitle anim">탐색부터 액션까지 &mdash; 에이전트가 필요한 모든 것.</p>
+      <div class="stack anim" style="max-width:560px;margin:2rem auto 0;">
+        <div class="stack-layer"><div class="stack-num">0</div><div class="stack-info"><div class="stack-name">Discovery (디스커버리)</div><div class="stack-detail">/.well-known/pact.json</div></div></div>
+        <div class="stack-layer"><div class="stack-num">1</div><div class="stack-info"><div class="stack-name">Schema (스키마)</div><div class="stack-detail">pact:domain/type@version</div></div></div>
+        <div class="stack-layer"><div class="stack-num">2</div><div class="stack-info"><div class="stack-name">Data (데이터)</div><div class="stack-detail">구조화된 JSON 응답</div></div></div>
+        <div class="stack-layer"><div class="stack-num">3</div><div class="stack-info"><div class="stack-name">Media (미디어)</div><div class="stack-detail">이미지 / 비디오 URL 포인터</div></div></div>
+        <div class="stack-layer"><div class="stack-num">4</div><div class="stack-info"><div class="stack-name">Actions (액션)</div><div class="stack-detail">구매 / 예약 / 구독</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo -->
+  <section class="section section--alt" id="demo">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">직접 확인하세요</p>
+      <h2 class="section__title anim">30초 만에 보는 PACT</h2>
+      <p class="section__subtitle anim">AI 에이전트가 PACT로 바이오메디컬 데이터를 탐색하고 소비하는 과정.</p>
+      <div class="terminal anim">
+        <div class="terminal__titlebar">
+          <div class="terminal__dots"><span class="terminal__dot terminal__dot--red"></span><span class="terminal__dot terminal__dot--yellow"></span><span class="terminal__dot terminal__dot--green"></span></div>
+          <div class="terminal__title">Terminal &mdash; PACT 데모</div>
+          <div class="terminal__controls">
+            <button class="terminal__btn" id="demoPlay" onclick="runDemo()">데모 재생</button>
+            <button class="terminal__btn" id="demoReset" onclick="resetDemo()" style="display:none;">초기화</button>
+          </div>
+        </div>
+        <div class="terminal__body" id="terminalBody">
+          <div class="terminal__line terminal__line--comment"># "데모 재생"을 클릭하세요</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Before vs After -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">왜 PACT인가?</p>
+      <h2 class="section__title anim">HTML 스크래핑 vs PACT</h2>
+      <p class="section__subtitle anim">같은 20개 상품. 극적으로 다른 토큰 비용.</p>
+      <div class="before-after anim">
+        <div class="before-after__panel before-after__panel--before">
+          <div class="before-after__header"><span class="badge badge--error">Before: HTML</span></div>
+          <div class="before-after__code"><pre><code>&lt;html&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+  &lt;script src="analytics.js"&gt;&lt;/script&gt;
+  &lt;!-- 47개 메타 태그 --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;nav class="mega-menu"&gt;
+    ...800 토큰 네비게이션...
+  &lt;/nav&gt;
+  &lt;div class="sidebar"&gt;
+    ...600 토큰 사이드바...
+  &lt;/div&gt;
+  &lt;div class="product-card"&gt;
+    &lt;div class="wrapper"&gt;
+      &lt;img loading="lazy" srcset="..."&gt;
+      &lt;span class="price"&gt;$9.99&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;footer&gt;...1200 토큰...&lt;/footer&gt;
+&lt;/body&gt;&lt;/html&gt;</code></pre></div>
+          <div class="before-after__stat"><span class="before-after__tokens before-after__tokens--bad count-up" data-target="40000" data-prefix="~" data-suffix=" 토큰">~0 토큰</span></div>
+        </div>
+        <div class="before-after__arrow">
+          <span class="before-after__reduction">57x</span>
+          <span class="before-after__reduction-label">절감</span>
+        </div>
+        <div class="before-after__panel before-after__panel--after">
+          <div class="before-after__header"><span class="badge">After: PACT</span></div>
+          <div class="before-after__code"><pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:commerce/product@1",
+  "$t": 1710590400,
+  "$ttl": 300,
+  "items": [
+    {"n":"위젯","p":9.99,"stk":true},
+    {"n":"가젯","p":19.99,"stk":true}
+  ],
+  "total": 20,
+  "page": {"offset":0,"limit":20}
+}</code></pre></div>
+          <div class="before-after__stat"><span class="before-after__tokens before-after__tokens--good count-up" data-target="700" data-prefix="~" data-suffix=" 토큰">~0 토큰</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Biomedical -->
+  <section class="section section--alt" id="biomedical">
+    <div class="container">
+      <p class="section__eyebrow anim" style="text-align:center;">실제 활용 사례</p>
+      <h2 class="section__title anim" style="text-align:center;">바이오메디컬 데이터를 위한 PACT</h2>
+      <p class="section__subtitle anim" style="text-align:center;">임상시험, 약물 상호작용, 유전체 데이터 &mdash; AI 에이전트가 정확하게 소비해야 하는 구조화 데이터.</p>
+      <div class="biomedical-grid">
+        <div class="biomedical-scenario anim">
+          <div class="biomedical-icon">
+            <svg viewBox="0 0 64 64" fill="none" width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="M32 4C28 4 24 8 22 14C18 12 14 13 12 16C10 19 11 23 14 26C10 28 8 32 8 36C8 40 10 44 14 46C12 50 13 54 16 56C19 58 23 57 26 54C28 58 32 60 36 60C40 60 44 56 46 50C50 52 54 51 56 48C58 45 57 41 54 38C58 36 60 32 60 28C60 24 58 20 54 18C56 14 55 10 52 8C49 6 45 7 42 10C40 6 36 4 32 4Z" stroke="#7c5cfc" stroke-width="1.5" opacity="0.6"/><circle cx="32" cy="32" r="6" fill="#00d4aa" opacity="0.8"/><circle cx="20" cy="20" r="3" fill="#7c5cfc" opacity="0.6"/><circle cx="44" cy="20" r="3" fill="#7c5cfc" opacity="0.6"/><circle cx="20" cy="44" r="3" fill="#00d4aa" opacity="0.6"/><circle cx="44" cy="44" r="3" fill="#00d4aa" opacity="0.6"/><line x1="32" y1="32" x2="20" y2="20" stroke="#7c5cfc" stroke-width="0.8" opacity="0.3"/><line x1="32" y1="32" x2="44" y2="20" stroke="#7c5cfc" stroke-width="0.8" opacity="0.3"/><line x1="32" y1="32" x2="20" y2="44" stroke="#00d4aa" stroke-width="0.8" opacity="0.3"/><line x1="32" y1="32" x2="44" y2="44" stroke="#00d4aa" stroke-width="0.8" opacity="0.3"/></svg>
+          </div>
+          <h3>임상시험 레지스트리</h3>
+          <p class="text-secondary">제약 데이터베이스가 AI 의료 어시스턴트에게 임상시험 데이터를 제공해야 합니다. 기존 HTML 페이지는 네비게이션, 광고, 포매팅에 토큰을 낭비합니다. PACT는 데이터만 전달합니다.</p>
+          <p class="text-secondary" style="margin-top:1rem;">의생명융합공학 분야에서 PACT가 가능하게 하는 것:</p>
+          <ul style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;">
+            <li>AI 약물감시를 위한 약물 상호작용 DB</li>
+            <li>구조화된 스펙의 의료기기 카탈로그</li>
+            <li>압축 전송이 가능한 유전체 변이 포털</li>
+            <li>AI 트리아지 에이전트를 위한 병원 API 게이트웨이</li>
+          </ul>
+          <div class="biomedical-stats">
+            <div class="biomedical-stat"><span class="biomedical-stat__value count-up" data-target="94" data-suffix="%">0%</span><span class="biomedical-stat__label">토큰 절감</span></div>
+            <div class="biomedical-stat"><span class="biomedical-stat__value">~180</span><span class="biomedical-stat__label">토큰 / 시험</span></div>
+            <div class="biomedical-stat"><span class="biomedical-stat__value">L3</span><span class="biomedical-stat__label">적합도</span></div>
+          </div>
+        </div>
+        <div class="code-block anim">
+          <div class="code-block__header">
+            <span class="code-block__label">pact:health/clinical-trial@1</span>
+            <button class="copy-btn" onclick="copyCode(this)">복사</button>
+          </div>
+          <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:health/clinical-trial@1",
+  "$t": 1710590400,
+  "$ttl": 3600,
+  "items": [
+    {
+      "id": "NCT06012345",
+      "n": "제3상 당뇨병 예방 임상시험",
+      "phase": "III",
+      "status": "recruiting",
+      "condition": "제2형 당뇨병",
+      "intervention": "GLP-1 수용체 작용제",
+      "sponsor": "서울대학교병원",
+      "enrollment": 450,
+      "start": "2026-01",
+      "end": "2028-06",
+      "locations": ["서울", "부산", "대전"],
+      "pi": "김 교수",
+      "contact": "clinicaltrial@snuh.org"
+    }
+  ],
+  "total": 1,
+  "page": { "offset": 0, "limit": 20 }
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Multi-Domain -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">범용 표준</p>
+      <h2 class="section__title anim">모든 도메인. 모든 플랫폼.</h2>
+      <p class="section__subtitle anim">PACT 스키마는 커머스, 헬스, 콘텐츠, 로컬, 미디어 등을 커버합니다.</p>
+      <div class="domain-cards stagger">
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F6D2;</span><h3>커머스</h3><code>pact:commerce/product@1</code><p>상품, 가격, 재고</p></div>
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F9EC;</span><h3>헬스</h3><code>pact:health/clinical-trial@1</code><p>임상시험, 약물, 유전체</p></div>
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F4F0;</span><h3>뉴스</h3><code>pact:news/article@1</code><p>기사, 블로그, 피드</p></div>
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F37D;</span><h3>음식</h3><code>pact:food/restaurant@1</code><p>레스토랑, 메뉴, 리뷰</p></div>
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F3AC;</span><h3>미디어</h3><code>pact:media/video@1</code><p>비디오, 팟캐스트, 스트림</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conformance -->
+  <section class="section section--alt" id="conformance">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">점진적 도입</p>
+      <h2 class="section__title anim">적합도 등급</h2>
+      <p class="section__subtitle anim">5분 만에 시작하세요. 자신의 속도로 성장하세요.</p>
+      <div class="conformance-timeline">
+        <div class="conformance-timeline__line"></div>
+        <div class="conformance-step anim"><div class="conformance-step__marker"><span>L1</span></div><div class="conformance-step__card"><h3>탐색 가능</h3><p class="card__text"><code>pact.json</code> 추가. 에이전트가 찾습니다.</p><div class="conformance-step__meta"><span class="badge">5분</span></div></div></div>
+        <div class="conformance-step anim"><div class="conformance-step__marker"><span>L2</span></div><div class="conformance-step__card"><h3>타입 지정</h3><p class="card__text">스키마 ID와 구조화 데이터 추가.</p><div class="conformance-step__meta"><span class="badge">30분</span></div></div></div>
+        <div class="conformance-step anim"><div class="conformance-step__marker"><span>L3</span></div><div class="conformance-step__card"><h3>효율적</h3><p class="card__text">압축, 페이지네이션, 테이블 레이아웃.</p><div class="conformance-step__meta"><span class="badge">수 시간</span></div></div></div>
+        <div class="conformance-step anim"><div class="conformance-step__marker"><span>L4</span></div><div class="conformance-step__card"><h3>신뢰</h3><p class="card__text">인증, 액션, 라이선스.</p><div class="conformance-step__meta"><span class="badge">수 일</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quickstart -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">시작하기</p>
+      <h2 class="section__title anim">빠른 시작</h2>
+      <p class="section__subtitle anim">이 파일을 <code>/.well-known/pact.json</code>에 추가하면 PACT 탐색이 가능합니다.</p>
+      <div class="quickstart-tabs anim">
+        <div class="quickstart-tabs__nav">
+          <button class="quickstart-tab active" data-tab="discovery">pact.json</button>
+          <button class="quickstart-tab" data-tab="response">응답</button>
+          <button class="quickstart-tab" data-tab="biomedical">헬스 스키마</button>
+        </div>
+        <div class="quickstart-tabs__body">
+          <button class="copy-btn" onclick="copyCode(this)">복사</button>
+          <div class="quickstart-panel active" id="tab-discovery"><pre><code>{
+  "pact": "1.0",
+  "site": "example.com",
+  "description": "사이트 설명",
+  "schemas": ["pact:commerce/product@1"],
+  "endpoints": {
+    "pact:commerce/product@1": {
+      "list": "/pact/products",
+      "item": "/pact/products/{id}",
+      "search": "/pact/products?q={query}"
+    }
+  }
+}</code></pre></div>
+          <div class="quickstart-panel" id="tab-response"><pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:commerce/product@1",
+  "$t": 1710590400,
+  "$ttl": 300,
+  "items": [
+    { "n": "위젯", "p": 9.99, "stk": true },
+    { "n": "가젯", "p": 19.99, "stk": true }
+  ],
+  "total": 2,
+  "page": { "offset": 0, "limit": 20 }
+}</code></pre></div>
+          <div class="quickstart-panel" id="tab-biomedical"><pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:health/clinical-trial@1",
+  "$t": 1710590400,
+  "items": [
+    {
+      "id": "NCT06012345",
+      "n": "제3상 당뇨병 예방 임상시험",
+      "phase": "III",
+      "status": "recruiting",
+      "condition": "제2형 당뇨병",
+      "intervention": "GLP-1 작용제",
+      "enrollment": 450
+    }
+  ],
+  "total": 1
+}</code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section section--alt">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">성장하는 생태계</p>
+      <h2 class="section__title anim">AI 시대를 위해 설계</h2>
+      <div class="stats-row anim" style="margin-top:2.5rem;">
+        <div class="stat-item"><span class="stat-item__value count-up" data-target="8" data-suffix="개">0</span><span class="stat-item__label">SDK 패키지</span></div>
+        <div class="stat-item"><span class="stat-item__value count-up" data-target="57" data-suffix="배">0</span><span class="stat-item__label">토큰 효율</span></div>
+        <div class="stat-item"><span class="stat-item__value count-up" data-target="12">0</span><span class="stat-item__label">표준 도메인</span></div>
+        <div class="stat-item"><span class="stat-item__value">Apache 2.0</span><span class="stat-item__label">오픈소스</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cross-Platform -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">크로스 플랫폼</p>
+      <h2 class="section__title anim">웹. 앱. IoT.</h2>
+      <p class="section__subtitle anim">HTTP가 통하는 어디서나 PACT가 동작합니다.</p>
+      <div class="anim" style="margin-top:2rem;display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;">
+        <div class="platform-item"><span class="platform-icon">&#x1F310;</span>웹</div>
+        <div class="platform-item"><span class="platform-icon">&#x1F4F1;</span>iOS</div>
+        <div class="platform-item"><span class="platform-icon">&#x1F4F2;</span>Android</div>
+        <div class="platform-item"><span class="platform-icon">&#x2699;</span>API</div>
+        <div class="platform-item"><span class="platform-icon">&#x1F4E1;</span>IoT</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="/docs/ko.html">스펙 문서</a></li>
+        <li><a href="/playground/ko.html">플레이그라운드</a></li>
+        <li><a href="/score/ko.html">AI 점수</a></li>
+        <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p>Apache 2.0 License &middot; PACT Working Group 2026</p>
+    </div>
+  </footer>
+
+  <script src="hero.js" defer></script>
+  <script src="demo.js" defer></script>
+</body>
+</html>

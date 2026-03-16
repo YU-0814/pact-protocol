@@ -1,0 +1,27 @@
+{% comment %}
+  PACT Protocol Discovery Document
+  Add this as a page template or include in theme.
+  Access at: /pages/pact-discovery (create a page with this template)
+{% endcomment %}
+{%- layout none -%}
+{%- content_type 'application/json' -%}
+{
+  "pact": "1.0",
+  "site": "{{ shop.domain }}",
+  "description": "{{ shop.description | escape }}",
+  "schemas": ["pact:commerce/product@1"],
+  "endpoints": {
+    "pact:commerce/product@1": {
+      "list": "/apps/pact/products",
+      "item": "/apps/pact/products/{id}",
+      "search": "/apps/pact/products?q={query}"
+    }
+  },
+  "platforms": {
+    "web": {
+      "base_url": "https://{{ shop.domain }}"
+    }
+  },
+  "auth": {"type": "public"},
+  "license": {"ai_input": true, "ai_train": false, "attribution": true}
+}

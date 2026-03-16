@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 가시성 점수 &mdash; PACT 프로토콜</title>
+  <meta name="description" content="도메인의 AI 준비도 점수를 확인하세요. 에이전트가 콘텐츠를 발견하고 소비할 수 있는지 확인합니다.">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .score-page { padding: 2rem 0 4rem; }
+    .score-page__header { text-align: center; margin-bottom: 2.5rem; }
+    .score-page__header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    .domain-input-bar { display: flex; gap: 0.75rem; max-width: 560px; margin: 0 auto 2.5rem; }
+    .domain-input-bar input { flex: 1; font-size: 0.95rem; padding: 0.85rem 1rem; }
+    .score-display { text-align: center; margin-bottom: 2.5rem; }
+    .score-ring { position: relative; width: 180px; height: 180px; margin: 0 auto 1rem; }
+    .score-ring svg { transform: rotate(-90deg); width: 180px; height: 180px; }
+    .score-ring__bg { fill: none; stroke: var(--border); stroke-width: 10; }
+    .score-ring__progress { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.8s ease; }
+    .score-ring__value { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: var(--font-mono); font-size: 2.5rem; font-weight: 700; color: var(--text-primary); }
+    .score-label { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-muted); }
+    .checklist { max-width: 600px; margin: 0 auto; }
+    .checklist-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1rem; border: 1px solid var(--border); border-bottom: none; background: var(--bg-card); transition: background var(--transition); }
+    .checklist-item:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+    .checklist-item:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+    .checklist-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; background: var(--bg-tertiary); color: var(--text-muted); border: 2px solid var(--border); transition: all 0.3s ease; }
+    .checklist-icon--pass { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+    .checklist-icon--fail { background: rgba(255, 85, 85, 0.1); color: var(--error); border-color: var(--error); }
+    .checklist-icon--pending { background: var(--bg-tertiary); color: var(--text-muted); border-color: var(--border); }
+    .checklist-info { flex: 1; }
+    .checklist-name { font-size: 0.9rem; font-weight: 500; color: var(--text-primary); }
+    .checklist-detail { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); }
+    .checklist-points { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600; color: var(--text-muted); flex-shrink: 0; }
+    .checklist-points--earned { color: var(--accent); }
+    .cors-notice { max-width: 600px; margin: 1.5rem auto 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
+    .cors-notice__title { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600; color: var(--warning); margin-bottom: 0.5rem; }
+    .cors-notice p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
+    .cors-notice pre { font-size: 0.8rem; padding: 0.75rem 1rem; margin: 0; }
+    .manual-section { max-width: 600px; margin: 2.5rem auto 0; }
+    .manual-section h3 { font-size: 1rem; margin-bottom: 0.75rem; }
+    .manual-section textarea { min-height: 140px; font-size: 0.8rem; }
+    .manual-controls { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+    .manual-select { font-family: var(--font-mono); font-size: 0.8rem; background: var(--bg-code); color: var(--text-primary); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.45rem 0.75rem; outline: none; }
+    .status-bar { text-align: center; padding: 0.5rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); min-height: 2rem; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="/ko.html" class="logo">PACT<span>protocol</span></a>
+      <button class="nav-toggle" aria-label="메뉴 열기" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
+      <nav>
+        <ul class="nav">
+          <li><a href="/docs/ko.html">스펙</a></li>
+          <li><a href="/playground/ko.html">플레이그라운드</a></li>
+          <li><a href="/score/ko.html" class="active">점수</a></li>
+          <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="score-page">
+    <div class="container">
+      <div class="score-page__header">
+        <h1>AI 가시성 점수</h1>
+        <p class="text-muted">도메인이 AI 에이전트에 얼마나 준비되었는지 확인하세요.</p>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;"><a href="/score/" style="color:var(--accent);text-decoration:none;">English</a> | 한국어</p>
+      </div>
+
+      <div class="domain-input-bar">
+        <input type="text" id="domainInput" placeholder="example.com" onkeydown="if(event.key==='Enter')checkScore()">
+        <button class="btn btn--primary" onclick="checkScore()">점수 확인</button>
+      </div>
+
+      <div class="status-bar" id="statusBar"></div>
+
+      <div class="score-display hidden" id="scoreDisplay">
+        <div class="score-ring">
+          <svg viewBox="0 0 180 180">
+            <circle class="score-ring__bg" cx="90" cy="90" r="75"></circle>
+            <circle class="score-ring__progress" id="scoreArc" cx="90" cy="90" r="75" stroke-dasharray="471.24" stroke-dashoffset="471.24"></circle>
+          </svg>
+          <div class="score-ring__value" id="scoreValue">0</div>
+        </div>
+        <div class="score-label" id="scoreLabel">100점 만점</div>
+      </div>
+
+      <div class="checklist hidden" id="checklist">
+        <div class="checklist-item" id="check-pact">
+          <div class="checklist-icon checklist-icon--pending" id="icon-pact">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">PACT 디스커버리</div>
+            <div class="checklist-detail">/.well-known/pact.json</div>
+          </div>
+          <div class="checklist-points" id="pts-pact">+40</div>
+        </div>
+        <div class="checklist-item" id="check-llms">
+          <div class="checklist-icon checklist-icon--pending" id="icon-llms">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">LLMs.txt</div>
+            <div class="checklist-detail">/llms.txt</div>
+          </div>
+          <div class="checklist-points" id="pts-llms">+20</div>
+        </div>
+        <div class="checklist-item" id="check-robots">
+          <div class="checklist-icon checklist-icon--pending" id="icon-robots">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">Robots.txt AI 지시어</div>
+            <div class="checklist-detail">/robots.txt</div>
+          </div>
+          <div class="checklist-points" id="pts-robots">+15</div>
+        </div>
+        <div class="checklist-item" id="check-schema">
+          <div class="checklist-icon checklist-icon--pending" id="icon-schema">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">Schema.org / JSON-LD</div>
+            <div class="checklist-detail">홈페이지 구조화 데이터</div>
+          </div>
+          <div class="checklist-points" id="pts-schema">+15</div>
+        </div>
+        <div class="checklist-item" id="check-valid">
+          <div class="checklist-icon checklist-icon--pending" id="icon-valid">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">PACT 응답 유효성</div>
+            <div class="checklist-detail">첫 번째 엔드포인트가 유효한 PACT 반환</div>
+          </div>
+          <div class="checklist-points" id="pts-valid">+10</div>
+        </div>
+      </div>
+
+      <div class="cors-notice hidden" id="corsNotice">
+        <div class="cors-notice__title">CORS 차단?</div>
+        <p>브라우저 보안이 크로스 오리진 요청을 차단합니다. 대부분의 검사가 서버에서 CORS를 허용하지 않으면 "차단"으로 표시됩니다. 터미널에서 아래 명령을 시도해보세요:</p>
+        <pre><code id="curlCommands">curl -s https://example.com/.well-known/pact.json
+curl -s https://example.com/llms.txt
+curl -s https://example.com/robots.txt</code></pre>
+      </div>
+
+      <div class="manual-section">
+        <h3>수동 검사</h3>
+        <p class="text-muted text-sm mb-2">CORS가 실시간 검사를 차단할 때 오프라인 검증을 위해 응답 내용을 붙여넣으세요.</p>
+        <textarea id="manualInput" placeholder="pact.json, llms.txt, robots.txt 또는 PACT 응답 내용을 여기에 붙여넣으세요..."></textarea>
+        <div class="manual-controls">
+          <select class="manual-select" id="manualType">
+            <option value="pact">pact.json</option>
+            <option value="llms">llms.txt</option>
+            <option value="robots">robots.txt</option>
+            <option value="response">PACT 응답</option>
+          </select>
+          <button class="btn btn--primary btn--sm" onclick="manualCheck()">검증</button>
+          <button class="btn btn--ghost btn--sm" onclick="clearManual()">지우기</button>
+        </div>
+        <div id="manualResult" class="mt-2"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="/docs/ko.html">스펙 문서</a></li>
+        <li><a href="/playground/ko.html">플레이그라운드</a></li>
+        <li><a href="/ko.html">홈</a></li>
+        <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p>Apache 2.0 License &middot; PACT Working Group 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    var scoreState = { pact: null, llms: null, robots: null, schema: null, valid: null };
+    var POINTS = { pact: 40, llms: 20, robots: 15, schema: 15, valid: 10 };
+    var circumference = 2 * Math.PI * 75;
+
+    function normalizeDomain(input) { return input.trim().replace(/^https?:\/\//, '').replace(/\/+$/, ''); }
+    function setStatus(msg) { document.getElementById('statusBar').textContent = msg; }
+
+    function setCheckState(key, passed, detail) {
+      var icon = document.getElementById('icon-' + key);
+      var pts = document.getElementById('pts-' + key);
+      scoreState[key] = passed;
+      icon.className = 'checklist-icon';
+      if (passed === true) { icon.classList.add('checklist-icon--pass'); icon.textContent = 'OK'; pts.classList.add('checklist-points--earned'); }
+      else if (passed === false) { icon.classList.add('checklist-icon--fail'); icon.textContent = 'NO'; pts.classList.remove('checklist-points--earned'); }
+      else { icon.classList.add('checklist-icon--pending'); icon.textContent = '--'; pts.classList.remove('checklist-points--earned'); }
+      if (detail) { var d = document.querySelector('#check-' + key + ' .checklist-detail'); if (d) d.textContent = detail; }
+      updateScore();
+    }
+
+    function updateScore() {
+      var score = 0;
+      Object.keys(POINTS).forEach(function(k) { if (scoreState[k] === true) score += POINTS[k]; });
+      document.getElementById('scoreValue').textContent = score;
+      var offset = circumference - (score / 100) * circumference;
+      var arc = document.getElementById('scoreArc');
+      arc.style.strokeDashoffset = offset;
+      if (score >= 70) arc.style.stroke = '#00d4aa';
+      else if (score >= 40) arc.style.stroke = '#ffaa33';
+      else arc.style.stroke = '#ff5555';
+    }
+
+    function resetChecks() { ['pact','llms','robots','schema','valid'].forEach(function(k) { setCheckState(k, null); }); }
+
+    async function checkScore() {
+      var raw = document.getElementById('domainInput').value.trim();
+      if (!raw) { setStatus('도메인 이름을 입력하세요.'); return; }
+      var domain = normalizeDomain(raw);
+      var base = 'https://' + domain;
+      document.getElementById('scoreDisplay').classList.remove('hidden');
+      document.getElementById('checklist').classList.remove('hidden');
+      document.getElementById('corsNotice').classList.remove('hidden');
+      document.getElementById('curlCommands').textContent = 'curl -s ' + base + '/.well-known/pact.json\ncurl -s ' + base + '/llms.txt\ncurl -s ' + base + '/robots.txt';
+      resetChecks();
+      setStatus(domain + ' 검사 중...');
+      var corsBlocked = 0;
+
+      try {
+        var r1 = await fetch(base + '/.well-known/pact.json', { mode: 'cors' });
+        if (r1.ok) {
+          var body = await r1.text();
+          try {
+            var pj = JSON.parse(body);
+            if (pj.pact && typeof pj.site === 'string' && pj.endpoints) setCheckState('pact', true, '유효한 pact.json 발견 (site: ' + pj.site + ')');
+            else if (pj.pact && pj.site) setCheckState('pact', true, 'pact.json 발견 (site 형식 확인 필요)');
+            else setCheckState('pact', false, 'pact.json이 있지만 필수 필드가 없습니다');
+          } catch (e) { setCheckState('pact', false, 'pact.json이 있지만 유효한 JSON이 아닙니다'); }
+        } else { setCheckState('pact', false, 'HTTP ' + r1.status); }
+      } catch (e) { setCheckState('pact', false, 'CORS 차단 또는 접근 불가'); corsBlocked++; }
+
+      try {
+        var r2 = await fetch(base + '/llms.txt', { mode: 'cors' });
+        if (r2.ok) setCheckState('llms', true, 'llms.txt 발견');
+        else setCheckState('llms', false, 'HTTP ' + r2.status);
+      } catch (e) { setCheckState('llms', false, 'CORS 차단 또는 접근 불가'); corsBlocked++; }
+
+      try {
+        var r3 = await fetch(base + '/robots.txt', { mode: 'cors' });
+        if (r3.ok) {
+          var robotsText = await r3.text();
+          var hasAI = /GPTBot|ChatGPT|anthropic|Claude|CCBot|Google-Extended|AI/i.test(robotsText);
+          setCheckState('robots', hasAI, hasAI ? 'AI 에이전트 지시어 있음' : 'AI 관련 지시어 없음');
+        } else { setCheckState('robots', false, 'HTTP ' + r3.status); }
+      } catch (e) { setCheckState('robots', false, 'CORS 차단 또는 접근 불가'); corsBlocked++; }
+
+      try {
+        var r4 = await fetch(base + '/', { mode: 'cors' });
+        if (r4.ok) {
+          var html = await r4.text();
+          var hasJsonLd = /application\/ld\+json/i.test(html);
+          var hasSchemaOrg = /schema\.org/i.test(html);
+          setCheckState('schema', hasJsonLd || hasSchemaOrg, (hasJsonLd || hasSchemaOrg) ? '구조화 데이터 감지됨' : 'JSON-LD 또는 Schema.org 없음');
+        } else { setCheckState('schema', false, '홈페이지 로드 실패'); }
+      } catch (e) { setCheckState('schema', false, 'CORS 차단 또는 접근 불가'); corsBlocked++; }
+
+      if (scoreState.pact === true) setCheckState('valid', true, '디스커버리 유효 (전체 엔드포인트 검사는 서버 측 필요)');
+      else setCheckState('valid', false, 'PACT 디스커버리 없음');
+
+      if (corsBlocked >= 3) setStatus('대부분의 검사가 CORS로 차단되었습니다. 아래 수동 검사를 사용하거나 curl 명령을 시도하세요.');
+      else setStatus('검사 완료: ' + domain);
+    }
+
+    function manualCheck() {
+      var content = document.getElementById('manualInput').value.trim();
+      var type = document.getElementById('manualType').value;
+      var resultDiv = document.getElementById('manualResult');
+      if (!content) { resultDiv.innerHTML = '<p style="color:var(--warning);font-size:0.85rem;">먼저 내용을 붙여넣으세요.</p>'; return; }
+      var html = '';
+      if (type === 'pact') {
+        try {
+          var pj = JSON.parse(content);
+          var hasPact = !!pj.pact, hasSite = !!pj.site;
+          var hasSchemas = pj.schemas && pj.schemas.length > 0;
+          var hasEndpoints = pj.endpoints && typeof pj.endpoints === 'object' && !Array.isArray(pj.endpoints);
+          var epCount = hasEndpoints ? Object.keys(pj.endpoints).length : 0;
+          if (hasPact && hasSite) {
+            html = '<p style="color:var(--success);font-family:var(--font-mono);font-size:0.85rem;">유효한 PACT 디스커버리 문서입니다.</p>';
+            html += '<ul class="result-list" style="margin-top:0.5rem;">';
+            html += '<li><span class="icon icon--pass">[ok]</span> 버전: ' + pj.pact + '</li>';
+            html += '<li><span class="icon icon--pass">[ok]</span> Site: ' + (typeof pj.site === 'string' ? pj.site : JSON.stringify(pj.site)) + '</li>';
+            html += '<li><span class="icon ' + (hasSchemas ? 'icon--pass' : 'icon--warn') + '">[' + (hasSchemas ? 'ok' : '~') + ']</span> 스키마: ' + (hasSchemas ? pj.schemas.length + '개' : '없음') + '</li>';
+            html += '<li><span class="icon ' + (hasEndpoints ? 'icon--pass' : 'icon--warn') + '">[' + (hasEndpoints ? 'ok' : '~') + ']</span> 엔드포인트: ' + (hasEndpoints ? epCount + '개' : '없음') + '</li>';
+            if (pj.rate_limit) html += '<li><span class="icon icon--pass">[ok]</span> 속도 제한: 분당 ' + pj.rate_limit.rpm + '회</li>';
+            if (pj.license) html += '<li><span class="icon icon--pass">[ok]</span> 라이선스 정의됨</li>';
+            if (pj.platforms) html += '<li><span class="icon icon--pass">[ok]</span> 플랫폼: ' + Object.keys(pj.platforms).join(', ') + '</li>';
+            html += '</ul>';
+            setCheckState('pact', true, '수동 검사: 유효');
+          } else { html = '<p style="color:var(--error);font-family:var(--font-mono);font-size:0.85rem;">유효하지 않음: "pact" 또는 "site" 필드 누락.</p>'; }
+        } catch (e) { html = '<p style="color:var(--error);font-family:var(--font-mono);font-size:0.85rem;">유효하지 않은 JSON: ' + escapeHtml(e.message) + '</p>'; }
+      } else if (type === 'llms') {
+        if (content.length > 10) { html = '<p style="color:var(--success);font-family:var(--font-mono);font-size:0.85rem;">llms.txt 내용 감지됨 (' + content.length + '자).</p>'; setCheckState('llms', true, '수동 검사: 발견'); }
+        else { html = '<p style="color:var(--warning);font-family:var(--font-mono);font-size:0.85rem;">llms.txt로 보기에 내용이 너무 짧습니다.</p>'; }
+      } else if (type === 'robots') {
+        var hasAI = /GPTBot|ChatGPT|anthropic|Claude|CCBot|Google-Extended|AI/i.test(content);
+        if (hasAI) { html = '<p style="color:var(--success);font-family:var(--font-mono);font-size:0.85rem;">robots.txt에서 AI 에이전트 지시어가 감지되었습니다.</p>'; setCheckState('robots', true, '수동 검사: AI 지시어 발견'); }
+        else { html = '<p style="color:var(--warning);font-family:var(--font-mono);font-size:0.85rem;">AI 관련 지시어가 없습니다. GPTBot, ChatGPT-User, anthropic-ai 등을 찾아보세요.</p>'; setCheckState('robots', false, '수동 검사: AI 지시어 없음'); }
+      } else if (type === 'response') {
+        try {
+          var resp = JSON.parse(content);
+          if (resp.$pact && (resp.$s || resp.$layout)) {
+            html = '<p style="color:var(--success);font-family:var(--font-mono);font-size:0.85rem;">유효한 PACT 응답입니다.</p>';
+            html += '<ul class="result-list" style="margin-top:0.5rem;">';
+            html += '<li><span class="icon icon--pass">[ok]</span> 버전: ' + resp.$pact + '</li>';
+            if (resp.$s) html += '<li><span class="icon icon--pass">[ok]</span> 스키마: ' + resp.$s + '</li>';
+            if (resp.$t) html += '<li><span class="icon icon--pass">[ok]</span> 타임스탬프: ' + new Date(resp.$t * 1000).toISOString() + '</li>';
+            if (resp.$ttl) html += '<li><span class="icon icon--pass">[ok]</span> TTL: ' + resp.$ttl + '초</li>';
+            if (resp.items) html += '<li><span class="icon icon--pass">[ok]</span> 항목: ' + resp.items.length + '개</li>';
+            if (resp.$layout === 'table') html += '<li><span class="icon icon--pass">[ok]</span> 테이블 레이아웃: ' + (resp.cols||[]).length + '열, ' + (resp.rows||[]).length + '행</li>';
+            if (typeof resp.total === 'number') html += '<li><span class="icon icon--pass">[ok]</span> 전체: ' + resp.total + '</li>';
+            html += '</ul>';
+            setCheckState('valid', true, '수동 검사: 유효한 응답');
+          } else { html = '<p style="color:var(--error);font-family:var(--font-mono);font-size:0.85rem;">유효하지 않은 PACT 응답: "$pact" 또는 "$s"/"$layout" 누락.</p>'; }
+        } catch (e) { html = '<p style="color:var(--error);font-family:var(--font-mono);font-size:0.85rem;">유효하지 않은 JSON: ' + escapeHtml(e.message) + '</p>'; }
+      }
+      resultDiv.innerHTML = html;
+    }
+
+    function clearManual() { document.getElementById('manualInput').value = ''; document.getElementById('manualResult').innerHTML = ''; }
+    function escapeHtml(str) { var div = document.createElement('div'); div.appendChild(document.createTextNode(str)); return div.innerHTML; }
+  </script>
+</body>
+</html>

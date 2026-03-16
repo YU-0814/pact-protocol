@@ -1,0 +1,68 @@
+{
+  "$pact": "1.0",
+  "$s": "pact:commerce/product@1",
+  "$t": 1710576000000,
+  "$ttl": 300,
+  "items": [
+    {
+      "id": "cpg-galaxy-s25u-256",
+      "n": "삼성 갤럭시 S25 Ultra 256GB 자급제",
+      "p": 1548000,
+      "cur": "KRW",
+      "url": "https://www.coupang.com/vp/products/galaxy-s25-ultra-256",
+      "m": "쿠팡",
+      "img": "https://pricefinder.kr/img/galaxy-s25-ultra.webp",
+      "stk": true,
+      "cat": "스마트폰"
+    },
+    {
+      "id": "nv-galaxy-s25u-256",
+      "n": "삼성 갤럭시 S25 Ultra 256GB 자급제",
+      "p": 1559000,
+      "cur": "KRW",
+      "url": "https://shopping.naver.com/products/galaxy-s25-ultra-256",
+      "m": "네이버쇼핑",
+      "img": "https://pricefinder.kr/img/galaxy-s25-ultra.webp",
+      "stk": true,
+      "cat": "스마트폰"
+    },
+    {
+      "id": "11st-galaxy-s25u-256",
+      "n": "삼성 갤럭시 S25 Ultra 256GB 자급제",
+      "p": 1535000,
+      "cur": "KRW",
+      "url": "https://www.11st.co.kr/products/galaxy-s25-ultra-256",
+      "m": "11번가",
+      "img": "https://pricefinder.kr/img/galaxy-s25-ultra.webp",
+      "stk": true,
+      "cat": "스마트폰"
+    },
+    {
+      "id": "gm-galaxy-s25u-256",
+      "n": "삼성 갤럭시 S25 Ultra 256GB 자급제",
+      "p": 1542000,
+      "cur": "KRW",
+      "url": "https://www.gmarket.co.kr/item/galaxy-s25-ultra-256",
+      "m": "G마켓",
+      "img": "https://pricefinder.kr/img/galaxy-s25-ultra.webp",
+      "stk": true,
+      "cat": "스마트폰"
+    },
+    {
+      "id": "wmp-galaxy-s25u-256",
+      "n": "삼성 갤럭시 S25 Ultra 256GB 자급제",
+      "p": 1539900,
+      "cur": "KRW",
+      "url": "https://www.wemakeprice.com/deal/galaxy-s25-ultra-256",
+      "m": "위메프",
+      "img": "https://pricefinder.kr/img/galaxy-s25-ultra.webp",
+      "stk": false,
+      "cat": "스마트폰"
+    }
+  ],
+  "total": 5,
+  "page": {
+    "offset": 0,
+    "limit": 20
+  }
+}

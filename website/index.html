@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PACT Protocol — The Standard for AI Agent Content</title>
+  <meta name="description" content="PACT delivers structured, token-efficient content to AI agents. 57x more efficient than HTML scraping. Make a PACT with AI agents.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Nav ===== -->
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo">PACT<span>protocol</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
+      <nav>
+        <ul class="nav">
+          <li><a href="/docs/">Spec</a></li>
+          <li><a href="/playground/">Playground</a></li>
+          <li><a href="/score/">Score</a></li>
+          <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== 1. Hero ===== -->
+  <section class="hero hero--new">
+    <canvas id="heroCanvas" class="hero__canvas"></canvas>
+    <div class="hero__glow"></div>
+    <div class="container" style="position:relative;z-index:1;">
+      <div class="hero__badge anim"><span class="badge">v1.0 Specification</span></div>
+      <h1 class="hero__title anim">The Standard for<br><span class="hero__title-gradient">AI Agent Content</span></h1>
+      <p class="hero__subtitle anim">PACT delivers structured, token-efficient data to AI agents. 57x more efficient than HTML scraping.</p>
+      <p class="hero__tagline anim">Make a PACT with AI agents. You control the terms.</p>
+      <p class="hero__lang anim">English | <a href="/ko.html">한국어</a></p>
+      <div class="hero__actions anim">
+        <a href="/docs/" class="btn btn--primary btn--lg">Read the Spec</a>
+        <a href="/playground/" class="btn btn--secondary btn--lg">Try Playground</a>
+        <a href="#demo" class="btn btn--ghost btn--lg">See Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2. The Missing Layer ===== -->
+  <section class="section section--alt">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">The Gap in the Stack</p>
+      <h2 class="section__title anim">The Missing Layer</h2>
+      <p class="section__subtitle anim">MCP gives AI tools. A2A connects agents. <strong>PACT delivers content.</strong></p>
+      <div class="diagram-container anim" style="max-width:500px;margin:2rem auto 0;">
+        <div style="font-family:var(--font-mono);font-size:0.82rem;color:var(--text-muted);line-height:2.2;text-align:center;">
+          <div>robots.txt</div>
+          <div style="color:var(--text-muted);font-size:0.65rem;">|</div>
+          <div>llms.txt</div>
+          <div style="color:var(--text-muted);font-size:0.65rem;">|</div>
+          <div>Schema.org</div>
+          <div style="color:var(--text-muted);font-size:0.65rem;">|</div>
+          <div style="color:var(--accent);font-weight:700;font-size:1rem;padding:0.5rem 0;border:1px solid rgba(0,212,170,0.3);border-radius:var(--radius);background:var(--accent-dim);margin:0.25rem auto;max-width:300px;">PACT &mdash; fills this gap</div>
+          <div style="color:var(--text-muted);font-size:0.65rem;">|</div>
+          <div>MCP (Model Context Protocol)</div>
+          <div style="color:var(--text-muted);font-size:0.65rem;">|</div>
+          <div>A2A (Agent-to-Agent)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. Architecture ===== -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">Architecture</p>
+      <h2 class="section__title anim">5-Layer Stack</h2>
+      <p class="section__subtitle anim">From discovery to action &mdash; everything an agent needs.</p>
+      <div class="stack anim" style="max-width:560px;margin:2rem auto 0;">
+        <div class="stack-layer"><div class="stack-num">0</div><div class="stack-info"><div class="stack-name">Discovery</div><div class="stack-detail">/.well-known/pact.json</div></div></div>
+        <div class="stack-layer"><div class="stack-num">1</div><div class="stack-info"><div class="stack-name">Schema</div><div class="stack-detail">pact:domain/type@version</div></div></div>
+        <div class="stack-layer"><div class="stack-num">2</div><div class="stack-info"><div class="stack-name">Data</div><div class="stack-detail">Structured JSON responses</div></div></div>
+        <div class="stack-layer"><div class="stack-num">3</div><div class="stack-info"><div class="stack-name">Media</div><div class="stack-detail">Image / video URL pointers</div></div></div>
+        <div class="stack-layer"><div class="stack-num">4</div><div class="stack-info"><div class="stack-name">Actions</div><div class="stack-detail">Purchase / reserve / subscribe</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. Demo ===== -->
+  <section class="section section--alt" id="demo">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">See It in Action</p>
+      <h2 class="section__title anim">PACT in 30 Seconds</h2>
+      <p class="section__subtitle anim">Watch an AI agent discover and consume biomedical data via PACT.</p>
+
+      <div class="terminal anim">
+        <div class="terminal__titlebar">
+          <div class="terminal__dots">
+            <span class="terminal__dot terminal__dot--red"></span>
+            <span class="terminal__dot terminal__dot--yellow"></span>
+            <span class="terminal__dot terminal__dot--green"></span>
+          </div>
+          <div class="terminal__title">Terminal &mdash; PACT Demo</div>
+          <div class="terminal__controls">
+            <button class="terminal__btn" id="demoPlay" onclick="runDemo()">Play Demo</button>
+            <button class="terminal__btn" id="demoReset" onclick="resetDemo()" style="display:none;">Reset</button>
+          </div>
+        </div>
+        <div class="terminal__body" id="terminalBody">
+          <div class="terminal__line terminal__line--comment"># Click "Play Demo" to watch PACT in action</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 5. Before vs After ===== -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">Why PACT?</p>
+      <h2 class="section__title anim">HTML Scraping vs PACT</h2>
+      <p class="section__subtitle anim">Same 20 products. Drastically different token cost.</p>
+
+      <div class="before-after anim">
+        <div class="before-after__panel before-after__panel--before">
+          <div class="before-after__header"><span class="badge badge--error">Before: HTML</span></div>
+          <div class="before-after__code"><pre><code>&lt;html&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+  &lt;script src="analytics.js"&gt;&lt;/script&gt;
+  &lt;!-- 47 more meta tags --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;nav class="mega-menu"&gt;
+    ...800 tokens of navigation...
+  &lt;/nav&gt;
+  &lt;div class="sidebar"&gt;
+    ...600 tokens of sidebar...
+  &lt;/div&gt;
+  &lt;div class="product-card"&gt;
+    &lt;div class="wrapper"&gt;
+      &lt;img loading="lazy" srcset="..."&gt;
+      &lt;span class="price"&gt;$9.99&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;footer&gt;...1200 tokens...&lt;/footer&gt;
+&lt;/body&gt;&lt;/html&gt;</code></pre></div>
+          <div class="before-after__stat"><span class="before-after__tokens before-after__tokens--bad count-up" data-target="40000" data-prefix="~" data-suffix=" tokens">~0 tokens</span></div>
+        </div>
+        <div class="before-after__arrow">
+          <span class="before-after__reduction">57x</span>
+          <span class="before-after__reduction-label">reduction</span>
+        </div>
+        <div class="before-after__panel before-after__panel--after">
+          <div class="before-after__header"><span class="badge">After: PACT</span></div>
+          <div class="before-after__code"><pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:commerce/product@1",
+  "$t": 1710590400,
+  "$ttl": 300,
+  "items": [
+    {"n":"Widget","p":9.99,"stk":true},
+    {"n":"Gadget","p":19.99,"stk":true}
+  ],
+  "total": 20,
+  "page": {"offset":0,"limit":20}
+}</code></pre></div>
+          <div class="before-after__stat"><span class="before-after__tokens before-after__tokens--good count-up" data-target="700" data-prefix="~" data-suffix=" tokens">~0 tokens</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. Biomedical Use Case ===== -->
+  <section class="section section--alt" id="biomedical">
+    <div class="container">
+      <p class="section__eyebrow anim" style="text-align:center;">Real-World Use Case</p>
+      <h2 class="section__title anim" style="text-align:center;">PACT for Biomedical Data</h2>
+      <p class="section__subtitle anim" style="text-align:center;">Clinical trials, drug interactions, genomic data &mdash; structured data that AI agents need to consume precisely.</p>
+
+      <div class="biomedical-grid">
+        <div class="biomedical-scenario anim">
+          <div class="biomedical-icon">
+            <svg viewBox="0 0 64 64" fill="none" width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="M32 4C28 4 24 8 22 14C18 12 14 13 12 16C10 19 11 23 14 26C10 28 8 32 8 36C8 40 10 44 14 46C12 50 13 54 16 56C19 58 23 57 26 54C28 58 32 60 36 60C40 60 44 56 46 50C50 52 54 51 56 48C58 45 57 41 54 38C58 36 60 32 60 28C60 24 58 20 54 18C56 14 55 10 52 8C49 6 45 7 42 10C40 6 36 4 32 4Z" stroke="#7c5cfc" stroke-width="1.5" opacity="0.6"/><circle cx="32" cy="32" r="6" fill="#00d4aa" opacity="0.8"/><circle cx="20" cy="20" r="3" fill="#7c5cfc" opacity="0.6"/><circle cx="44" cy="20" r="3" fill="#7c5cfc" opacity="0.6"/><circle cx="20" cy="44" r="3" fill="#00d4aa" opacity="0.6"/><circle cx="44" cy="44" r="3" fill="#00d4aa" opacity="0.6"/><line x1="32" y1="32" x2="20" y2="20" stroke="#7c5cfc" stroke-width="0.8" opacity="0.3"/><line x1="32" y1="32" x2="44" y2="20" stroke="#7c5cfc" stroke-width="0.8" opacity="0.3"/><line x1="32" y1="32" x2="20" y2="44" stroke="#00d4aa" stroke-width="0.8" opacity="0.3"/><line x1="32" y1="32" x2="44" y2="44" stroke="#00d4aa" stroke-width="0.8" opacity="0.3"/></svg>
+          </div>
+          <h3>Clinical Trial Registry</h3>
+          <p class="text-secondary">A pharmaceutical database needs to serve clinical trial data to AI medical assistants. Traditional HTML pages waste tokens on navigation, ads, and formatting. PACT delivers just the data.</p>
+          <p class="text-secondary" style="margin-top:1rem;">For biomedical convergence engineering, PACT enables:</p>
+          <ul style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;">
+            <li>Drug interaction databases for AI pharmacovigilance</li>
+            <li>Medical device catalogs with structured specs</li>
+            <li>Genomic variant portals with compression</li>
+            <li>Hospital API gateways for AI triage agents</li>
+          </ul>
+          <div class="biomedical-stats">
+            <div class="biomedical-stat"><span class="biomedical-stat__value count-up" data-target="94" data-suffix="%">0%</span><span class="biomedical-stat__label">Token Reduction</span></div>
+            <div class="biomedical-stat"><span class="biomedical-stat__value">~180</span><span class="biomedical-stat__label">Tokens / Trial</span></div>
+            <div class="biomedical-stat"><span class="biomedical-stat__value">L3</span><span class="biomedical-stat__label">Conformance</span></div>
+          </div>
+        </div>
+
+        <div class="code-block anim">
+          <div class="code-block__header">
+            <span class="code-block__label">pact:health/clinical-trial@1</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:health/clinical-trial@1",
+  "$t": 1710590400,
+  "$ttl": 3600,
+  "items": [
+    {
+      "id": "NCT06012345",
+      "n": "Phase III Diabetes Prevention Trial",
+      "phase": "III",
+      "status": "recruiting",
+      "condition": "Type 2 Diabetes Mellitus",
+      "intervention": "GLP-1 receptor agonist",
+      "sponsor": "Seoul National University Hospital",
+      "enrollment": 450,
+      "start": "2026-01",
+      "end": "2028-06",
+      "locations": ["Seoul", "Busan", "Daejeon"],
+      "pi": "Dr. Kim",
+      "contact": "clinicaltrial@snuh.org"
+    }
+  ],
+  "total": 1,
+  "page": { "offset": 0, "limit": 20 }
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 7. Multi-Domain ===== -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">Universal Standard</p>
+      <h2 class="section__title anim">Any Domain. Any Platform.</h2>
+      <p class="section__subtitle anim">PACT schemas cover commerce, health, content, local, media, and more.</p>
+
+      <div class="domain-cards stagger">
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F6D2;</span><h3>Commerce</h3><code>pact:commerce/product@1</code><p>Products, prices, inventory</p></div>
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F9EC;</span><h3>Health</h3><code>pact:health/clinical-trial@1</code><p>Trials, drugs, genomics</p></div>
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F4F0;</span><h3>News</h3><code>pact:news/article@1</code><p>Articles, blogs, feeds</p></div>
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F37D;</span><h3>Food</h3><code>pact:food/restaurant@1</code><p>Restaurants, menus, reviews</p></div>
+        <div class="domain-card card--gradient anim"><span class="domain-card__icon">&#x1F3AC;</span><h3>Media</h3><code>pact:media/video@1</code><p>Videos, podcasts, streams</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. Conformance Timeline ===== -->
+  <section class="section section--alt" id="conformance">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">Progressive Adoption</p>
+      <h2 class="section__title anim">Conformance Levels</h2>
+      <p class="section__subtitle anim">Start in 5 minutes. Grow at your own pace.</p>
+
+      <div class="conformance-timeline">
+        <div class="conformance-timeline__line"></div>
+        <div class="conformance-step anim">
+          <div class="conformance-step__marker"><span>L1</span></div>
+          <div class="conformance-step__card">
+            <h3>Discoverable</h3>
+            <p class="card__text">Add <code>pact.json</code>. Agents find you.</p>
+            <div class="conformance-step__meta"><span class="badge">5 min</span></div>
+          </div>
+        </div>
+        <div class="conformance-step anim">
+          <div class="conformance-step__marker"><span>L2</span></div>
+          <div class="conformance-step__card">
+            <h3>Typed</h3>
+            <p class="card__text">Add schema IDs and structured data.</p>
+            <div class="conformance-step__meta"><span class="badge">30 min</span></div>
+          </div>
+        </div>
+        <div class="conformance-step anim">
+          <div class="conformance-step__marker"><span>L3</span></div>
+          <div class="conformance-step__card">
+            <h3>Efficient</h3>
+            <p class="card__text">Compression, pagination, table layout.</p>
+            <div class="conformance-step__meta"><span class="badge">Hours</span></div>
+          </div>
+        </div>
+        <div class="conformance-step anim">
+          <div class="conformance-step__marker"><span>L4</span></div>
+          <div class="conformance-step__card">
+            <h3>Trusted</h3>
+            <p class="card__text">Auth, actions, licensing.</p>
+            <div class="conformance-step__meta"><span class="badge">Days</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 9. Quickstart ===== -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">Get Started</p>
+      <h2 class="section__title anim">Quick Start</h2>
+      <p class="section__subtitle anim">Add this file to <code>/.well-known/pact.json</code> and you are PACT-discoverable.</p>
+
+      <div class="quickstart-tabs anim">
+        <div class="quickstart-tabs__nav">
+          <button class="quickstart-tab active" data-tab="discovery">pact.json</button>
+          <button class="quickstart-tab" data-tab="response">Response</button>
+          <button class="quickstart-tab" data-tab="biomedical">Health Schema</button>
+        </div>
+        <div class="quickstart-tabs__body">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          <div class="quickstart-panel active" id="tab-discovery">
+            <pre><code>{
+  "pact": "1.0",
+  "site": "example.com",
+  "description": "Your site description",
+  "schemas": ["pact:commerce/product@1"],
+  "endpoints": {
+    "pact:commerce/product@1": {
+      "list": "/pact/products",
+      "item": "/pact/products/{id}",
+      "search": "/pact/products?q={query}"
+    }
+  }
+}</code></pre>
+          </div>
+          <div class="quickstart-panel" id="tab-response">
+            <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:commerce/product@1",
+  "$t": 1710590400,
+  "$ttl": 300,
+  "items": [
+    { "n": "Widget", "p": 9.99, "stk": true },
+    { "n": "Gadget", "p": 19.99, "stk": true }
+  ],
+  "total": 2,
+  "page": { "offset": 0, "limit": 20 }
+}</code></pre>
+          </div>
+          <div class="quickstart-panel" id="tab-biomedical">
+            <pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:health/clinical-trial@1",
+  "$t": 1710590400,
+  "items": [
+    {
+      "id": "NCT06012345",
+      "n": "Phase III Diabetes Prevention",
+      "phase": "III",
+      "status": "recruiting",
+      "condition": "Type 2 Diabetes",
+      "intervention": "GLP-1 agonist",
+      "enrollment": 450
+    }
+  ],
+  "total": 1
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 10. Stats ===== -->
+  <section class="section section--alt">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">Growing Ecosystem</p>
+      <h2 class="section__title anim">Built for the AI Era</h2>
+      <div class="stats-row anim" style="margin-top:2.5rem;">
+        <div class="stat-item"><span class="stat-item__value count-up" data-target="8" data-suffix=" pkgs">0</span><span class="stat-item__label">SDK Packages</span></div>
+        <div class="stat-item"><span class="stat-item__value count-up" data-target="57" data-suffix="x">0</span><span class="stat-item__label">Token Efficiency</span></div>
+        <div class="stat-item"><span class="stat-item__value count-up" data-target="12" data-suffix="">0</span><span class="stat-item__label">Standard Domains</span></div>
+        <div class="stat-item"><span class="stat-item__value">Apache 2.0</span><span class="stat-item__label">Open Source</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 11. Cross-Platform ===== -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">Cross-Platform</p>
+      <h2 class="section__title anim">Web. Apps. IoT.</h2>
+      <p class="section__subtitle anim">Anywhere HTTP speaks, PACT works.</p>
+      <div class="platform-grid anim" style="margin-top:2rem;display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;">
+        <div class="platform-item"><span class="platform-icon">&#x1F310;</span>Web</div>
+        <div class="platform-item"><span class="platform-icon">&#x1F4F1;</span>iOS</div>
+        <div class="platform-item"><span class="platform-icon">&#x1F4F2;</span>Android</div>
+        <div class="platform-item"><span class="platform-icon">&#x2699;</span>API</div>
+        <div class="platform-item"><span class="platform-icon">&#x1F4E1;</span>IoT</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="/docs/">Specification</a></li>
+        <li><a href="/playground/">Playground</a></li>
+        <li><a href="/score/">AI Score</a></li>
+        <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p>Apache 2.0 License &middot; PACT Working Group 2026</p>
+    </div>
+  </footer>
+
+  <script src="hero.js" defer></script>
+  <script src="demo.js" defer></script>
+</body>
+</html>

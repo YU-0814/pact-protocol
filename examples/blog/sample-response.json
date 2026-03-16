@@ -1,0 +1,46 @@
+{
+  "$pact": "1.0",
+  "$s": "pact:news/article@1",
+  "$t": 1710576000000,
+  "$ttl": 600,
+  "items": [
+    {
+      "id": "understanding-transformer-architecture",
+      "t": "Understanding the Transformer Architecture: A Deep Dive",
+      "auth": "Sarah Chen",
+      "pub": "2026-03-10T09:00:00Z",
+      "sum": "An in-depth exploration of the transformer architecture that powers modern large language models, from self-attention mechanisms to positional encoding.",
+      "url": "https://techblog.example.com/posts/understanding-transformer-architecture",
+      "tags": ["AI", "deep-learning", "transformers", "NLP"],
+      "img": "https://techblog.example.com/img/transformer-arch.webp",
+      "rt": 12
+    },
+    {
+      "id": "kubernetes-cost-optimization-2026",
+      "t": "Kubernetes Cost Optimization Strategies for 2026",
+      "auth": "James Park",
+      "pub": "2026-03-08T14:30:00Z",
+      "sum": "Practical techniques to reduce your Kubernetes cloud spending by up to 40% including right-sizing, spot instances, and autoscaling best practices.",
+      "url": "https://techblog.example.com/posts/kubernetes-cost-optimization-2026",
+      "tags": ["kubernetes", "cloud", "devops", "cost-optimization"],
+      "img": "https://techblog.example.com/img/k8s-costs.webp",
+      "rt": 8
+    },
+    {
+      "id": "rust-async-patterns",
+      "t": "Advanced Async Patterns in Rust: Beyond Tokio Basics",
+      "auth": "Maria Rodriguez",
+      "pub": "2026-03-05T11:00:00Z",
+      "sum": "Exploring advanced asynchronous programming patterns in Rust including structured concurrency, cancellation safety, and custom executors.",
+      "url": "https://techblog.example.com/posts/rust-async-patterns",
+      "tags": ["rust", "async", "concurrency", "programming"],
+      "img": "https://techblog.example.com/img/rust-async.webp",
+      "rt": 15
+    }
+  ],
+  "total": 3,
+  "page": {
+    "offset": 0,
+    "limit": 20
+  }
+}

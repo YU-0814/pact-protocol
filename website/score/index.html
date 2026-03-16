@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Visibility Score &mdash; PACT Protocol</title>
+  <meta name="description" content="Check your domain's AI readiness score. See if agents can discover and consume your content.">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .score-page {
+      padding: 2rem 0 4rem;
+    }
+
+    .score-page__header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .score-page__header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Input bar */
+    .domain-input-bar {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .domain-input-bar input {
+      flex: 1;
+      font-size: 0.95rem;
+      padding: 0.85rem 1rem;
+    }
+
+    /* Score Display */
+    .score-display {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .score-ring {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 1rem;
+    }
+
+    .score-ring svg {
+      transform: rotate(-90deg);
+      width: 180px;
+      height: 180px;
+    }
+
+    .score-ring__bg {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 10;
+    }
+
+    .score-ring__progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.8s ease;
+    }
+
+    .score-ring__value {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-mono);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .score-label {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Checklist */
+    .checklist {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      background: var(--bg-card);
+      transition: background var(--transition);
+    }
+
+    .checklist-item:first-child {
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .checklist-item:last-child {
+      border-bottom: 1px solid var(--border);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    .checklist-icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: var(--bg-tertiary);
+      color: var(--text-muted);
+      border: 2px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .checklist-icon--pass {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .checklist-icon--fail {
+      background: rgba(255, 85, 85, 0.1);
+      color: var(--error);
+      border-color: var(--error);
+    }
+
+    .checklist-icon--pending {
+      background: var(--bg-tertiary);
+      color: var(--text-muted);
+      border-color: var(--border);
+    }
+
+    .checklist-info {
+      flex: 1;
+    }
+
+    .checklist-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .checklist-detail {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .checklist-points {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .checklist-points--earned {
+      color: var(--accent);
+    }
+
+    /* CORS notice */
+    .cors-notice {
+      max-width: 600px;
+      margin: 1.5rem auto 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+    }
+
+    .cors-notice__title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--warning);
+      margin-bottom: 0.5rem;
+    }
+
+    .cors-notice p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .cors-notice pre {
+      font-size: 0.8rem;
+      padding: 0.75rem 1rem;
+      margin: 0;
+    }
+
+    /* Manual check */
+    .manual-section {
+      max-width: 600px;
+      margin: 2.5rem auto 0;
+    }
+
+    .manual-section h3 {
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .manual-section textarea {
+      min-height: 140px;
+      font-size: 0.8rem;
+    }
+
+    .manual-controls {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .manual-select {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--bg-code);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.45rem 0.75rem;
+      outline: none;
+    }
+
+    /* Status bar */
+    .status-bar {
+      text-align: center;
+      padding: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      min-height: 2rem;
+    }
+
+    /* Hidden state */
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo">PACT<span>protocol</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
+      <nav>
+        <ul class="nav">
+          <li><a href="/docs/">Spec</a></li>
+          <li><a href="/playground/">Playground</a></li>
+          <li><a href="/score/" class="active">Score</a></li>
+          <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Main ===== -->
+  <main class="score-page">
+    <div class="container">
+      <div class="score-page__header">
+        <h1>AI Visibility Score</h1>
+        <p class="text-muted">Check how ready your domain is for AI agents.</p>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;">English | <a href="/score/ko.html" style="color:var(--accent);text-decoration:none;">한국어</a></p>
+      </div>
+
+      <!-- Domain Input -->
+      <div class="domain-input-bar">
+        <input type="text" id="domainInput" placeholder="example.com" onkeydown="if(event.key==='Enter')checkScore()">
+        <button class="btn btn--primary" onclick="checkScore()">Check Score</button>
+      </div>
+
+      <!-- Status -->
+      <div class="status-bar" id="statusBar"></div>
+
+      <!-- Score Ring -->
+      <div class="score-display hidden" id="scoreDisplay">
+        <div class="score-ring">
+          <svg viewBox="0 0 180 180">
+            <circle class="score-ring__bg" cx="90" cy="90" r="75"></circle>
+            <circle class="score-ring__progress" id="scoreArc" cx="90" cy="90" r="75"
+              stroke-dasharray="471.24"
+              stroke-dashoffset="471.24"></circle>
+          </svg>
+          <div class="score-ring__value" id="scoreValue">0</div>
+        </div>
+        <div class="score-label" id="scoreLabel">out of 100</div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="checklist hidden" id="checklist">
+        <div class="checklist-item" id="check-pact">
+          <div class="checklist-icon checklist-icon--pending" id="icon-pact">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">PACT Discovery</div>
+            <div class="checklist-detail">/.well-known/pact.json</div>
+          </div>
+          <div class="checklist-points" id="pts-pact">+40</div>
+        </div>
+
+        <div class="checklist-item" id="check-llms">
+          <div class="checklist-icon checklist-icon--pending" id="icon-llms">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">LLMs.txt</div>
+            <div class="checklist-detail">/llms.txt</div>
+          </div>
+          <div class="checklist-points" id="pts-llms">+20</div>
+        </div>
+
+        <div class="checklist-item" id="check-robots">
+          <div class="checklist-icon checklist-icon--pending" id="icon-robots">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">Robots.txt AI Directives</div>
+            <div class="checklist-detail">/robots.txt</div>
+          </div>
+          <div class="checklist-points" id="pts-robots">+15</div>
+        </div>
+
+        <div class="checklist-item" id="check-schema">
+          <div class="checklist-icon checklist-icon--pending" id="icon-schema">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">Schema.org / JSON-LD</div>
+            <div class="checklist-detail">Homepage structured data</div>
+          </div>
+          <div class="checklist-points" id="pts-schema">+15</div>
+        </div>
+
+        <div class="checklist-item" id="check-valid">
+          <div class="checklist-icon checklist-icon--pending" id="icon-valid">--</div>
+          <div class="checklist-info">
+            <div class="checklist-name">PACT Response Valid</div>
+            <div class="checklist-detail">First endpoint returns valid PACT</div>
+          </div>
+          <div class="checklist-points" id="pts-valid">+10</div>
+        </div>
+      </div>
+
+      <!-- CORS Notice -->
+      <div class="cors-notice hidden" id="corsNotice">
+        <div class="cors-notice__title">CORS Blocked?</div>
+        <p>Browser security prevents cross-origin requests. Most checks will show as "blocked" unless the target server allows CORS. Try these commands in your terminal instead:</p>
+        <pre><code id="curlCommands">curl -s https://example.com/.well-known/pact.json
+curl -s https://example.com/llms.txt
+curl -s https://example.com/robots.txt</code></pre>
+      </div>
+
+      <!-- Manual Check -->
+      <div class="manual-section">
+        <h3>Manual Check</h3>
+        <p class="text-muted text-sm mb-2">Paste response content for offline validation (for when CORS blocks live checks).</p>
+        <textarea id="manualInput" placeholder="Paste the content of pact.json, llms.txt, robots.txt, or a PACT response here..."></textarea>
+        <div class="manual-controls">
+          <select class="manual-select" id="manualType">
+            <option value="pact">pact.json</option>
+            <option value="llms">llms.txt</option>
+            <option value="robots">robots.txt</option>
+            <option value="response">PACT Response</option>
+          </select>
+          <button class="btn btn--primary btn--sm" onclick="manualCheck()">Validate</button>
+          <button class="btn btn--ghost btn--sm" onclick="clearManual()">Clear</button>
+        </div>
+        <div id="manualResult" class="mt-2"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="/docs/">Specification</a></li>
+        <li><a href="/playground/">Playground</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="https://github.com/pact-protocol" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p>Apache 2.0 License &middot; PACT Working Group 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    var scoreState = {
+      pact: null,
+      llms: null,
+      robots: null,
+      schema: null,
+      valid: null
+    };
+
+    var POINTS = { pact: 40, llms: 20, robots: 15, schema: 15, valid: 10 };
+    var circumference = 2 * Math.PI * 75; // 471.24
+
+    function normalizeDomain(input) {
+      var d = input.trim().replace(/^https?:\/\//, '').replace(/\/+$/, '');
+      return d;
+    }
+
+    function setStatus(msg) {
+      document.getElementById('statusBar').textContent = msg;
+    }
+
+    function setCheckState(key, passed, detail) {
+      var icon = document.getElementById('icon-' + key);
+      var pts = document.getElementById('pts-' + key);
+
+      scoreState[key] = passed;
+
+      icon.className = 'checklist-icon';
+      if (passed === true) {
+        icon.classList.add('checklist-icon--pass');
+        icon.textContent = 'OK';
+        pts.classList.add('checklist-points--earned');
+      } else if (passed === false) {
+        icon.classList.add('checklist-icon--fail');
+        icon.textContent = 'NO';
+        pts.classList.remove('checklist-points--earned');
+      } else {
+        icon.classList.add('checklist-icon--pending');
+        icon.textContent = '--';
+        pts.classList.remove('checklist-points--earned');
+      }
+
+      if (detail) {
+        var detailEl = document.querySelector('#check-' + key + ' .checklist-detail');
+        if (detailEl) detailEl.textContent = detail;
+      }
+
+      updateScore();
+    }
+
+    function updateScore() {
+      var score = 0;
+      Object.keys(POINTS).forEach(function(k) {
+        if (scoreState[k] === true) score += POINTS[k];
+      });
+
+      var scoreValue = document.getElementById('scoreValue');
+      var scoreArc = document.getElementById('scoreArc');
+
+      scoreValue.textContent = score;
+
+      var offset = circumference - (score / 100) * circumference;
+      scoreArc.style.strokeDashoffset = offset;
+
+      // Color based on score
+      var color;
+      if (score >= 70) color = '#00d4aa';
+      else if (score >= 40) color = '#ffaa33';
+      else color = '#ff5555';
+      scoreArc.style.stroke = color;
+    }
+
+    function resetChecks() {
+      ['pact', 'llms', 'robots', 'schema', 'valid'].forEach(function(k) {
+        setCheckState(k, null);
+      });
+    }
+
+    async function checkScore() {
+      var raw = document.getElementById('domainInput').value.trim();
+      if (!raw) {
+        setStatus('Enter a domain name.');
+        return;
+      }
+
+      var domain = normalizeDomain(raw);
+      var base = 'https://' + domain;
+
+      // Show UI
+      document.getElementById('scoreDisplay').classList.remove('hidden');
+      document.getElementById('checklist').classList.remove('hidden');
+      document.getElementById('corsNotice').classList.remove('hidden');
+
+      // Update curl commands
+      document.getElementById('curlCommands').textContent =
+        'curl -s ' + base + '/.well-known/pact.json\ncurl -s ' + base + '/llms.txt\ncurl -s ' + base + '/robots.txt';
+
+      resetChecks();
+      setStatus('Checking ' + domain + '...');
+
+      var corsBlocked = 0;
+
+      // Check pact.json
+      try {
+        var r1 = await fetch(base + '/.well-known/pact.json', { mode: 'cors' });
+        if (r1.ok) {
+          var body = await r1.text();
+          try {
+            var pj = JSON.parse(body);
+            if (pj.pact && typeof pj.site === 'string' && pj.endpoints) {
+              setCheckState('pact', true, 'Found valid pact.json (site: ' + pj.site + ')');
+            } else if (pj.pact && pj.site) {
+              setCheckState('pact', true, 'Found pact.json (check site format)');
+            } else {
+              setCheckState('pact', false, 'pact.json exists but missing required fields');
+            }
+          } catch (e) {
+            setCheckState('pact', false, 'pact.json exists but is not valid JSON');
+          }
+        } else {
+          setCheckState('pact', false, 'HTTP ' + r1.status);
+        }
+      } catch (e) {
+        setCheckState('pact', false, 'CORS blocked or unreachable');
+        corsBlocked++;
+      }
+
+      // Check llms.txt
+      try {
+        var r2 = await fetch(base + '/llms.txt', { mode: 'cors' });
+        if (r2.ok) {
+          setCheckState('llms', true, 'Found llms.txt');
+        } else {
+          setCheckState('llms', false, 'HTTP ' + r2.status);
+        }
+      } catch (e) {
+        setCheckState('llms', false, 'CORS blocked or unreachable');
+        corsBlocked++;
+      }
+
+      // Check robots.txt
+      try {
+        var r3 = await fetch(base + '/robots.txt', { mode: 'cors' });
+        if (r3.ok) {
+          var robotsText = await r3.text();
+          var hasAI = /GPTBot|ChatGPT|anthropic|Claude|CCBot|Google-Extended|AI/i.test(robotsText);
+          setCheckState('robots', hasAI, hasAI ? 'Has AI agent directives' : 'No AI-specific directives found');
+        } else {
+          setCheckState('robots', false, 'HTTP ' + r3.status);
+        }
+      } catch (e) {
+        setCheckState('robots', false, 'CORS blocked or unreachable');
+        corsBlocked++;
+      }
+
+      // Check Schema.org / JSON-LD
+      try {
+        var r4 = await fetch(base + '/', { mode: 'cors' });
+        if (r4.ok) {
+          var html = await r4.text();
+          var hasJsonLd = /application\/ld\+json/i.test(html);
+          var hasSchemaOrg = /schema\.org/i.test(html);
+          setCheckState('schema', hasJsonLd || hasSchemaOrg,
+            (hasJsonLd || hasSchemaOrg) ? 'Structured data detected' : 'No JSON-LD or Schema.org found');
+        } else {
+          setCheckState('schema', false, 'Could not load homepage');
+        }
+      } catch (e) {
+        setCheckState('schema', false, 'CORS blocked or unreachable');
+        corsBlocked++;
+      }
+
+      // PACT response valid (skip if no pact.json)
+      if (scoreState.pact === true) {
+        setCheckState('valid', true, 'Discovery valid (full endpoint check requires server-side)');
+      } else {
+        setCheckState('valid', false, 'No PACT discovery found');
+      }
+
+      if (corsBlocked >= 3) {
+        setStatus('Most checks were CORS-blocked. Use the manual check below or try curl commands.');
+      } else {
+        setStatus('Scan complete for ' + domain);
+      }
+    }
+
+    // --- Manual Check ---
+    function manualCheck() {
+      var content = document.getElementById('manualInput').value.trim();
+      var type = document.getElementById('manualType').value;
+      var resultDiv = document.getElementById('manualResult');
+
+      if (!content) {
+        resultDiv.innerHTML = '<p style="color:var(--warning);font-size:0.85rem;">Paste some content first.</p>';
+        return;
+      }
+
+      var html = '';
+
+      if (type === 'pact') {
+        try {
+          var pj = JSON.parse(content);
+          var hasPact = !!pj.pact;
+          var hasSite = !!pj.site;
+          var hasSchemas = pj.schemas && pj.schemas.length > 0;
+          var hasEndpoints = pj.endpoints && typeof pj.endpoints === 'object' && !Array.isArray(pj.endpoints);
+          var epCount = hasEndpoints ? Object.keys(pj.endpoints).length : 0;
+
+          if (hasPact && hasSite) {
+            html = '<p style="color:var(--success);font-family:var(--font-mono);font-size:0.85rem;">Valid PACT discovery document.</p>';
+            html += '<ul class="result-list" style="margin-top:0.5rem;">';
+            html += '<li><span class="icon icon--pass">[ok]</span> Version: ' + pj.pact + '</li>';
+            html += '<li><span class="icon icon--pass">[ok]</span> Site: ' + (typeof pj.site === 'string' ? pj.site : JSON.stringify(pj.site)) + '</li>';
+            html += '<li><span class="icon ' + (hasSchemas ? 'icon--pass' : 'icon--warn') + '">[' + (hasSchemas ? 'ok' : '~') + ']</span> Schemas: ' + (hasSchemas ? pj.schemas.length : 'none') + '</li>';
+            html += '<li><span class="icon ' + (hasEndpoints ? 'icon--pass' : 'icon--warn') + '">[' + (hasEndpoints ? 'ok' : '~') + ']</span> Endpoints: ' + (hasEndpoints ? epCount : 'none') + '</li>';
+            if (pj.rate_limit) html += '<li><span class="icon icon--pass">[ok]</span> Rate limit: ' + pj.rate_limit.rpm + ' rpm</li>';
+            if (pj.license) html += '<li><span class="icon icon--pass">[ok]</span> License defined</li>';
+            if (pj.platforms) html += '<li><span class="icon icon--pass">[ok]</span> Platforms: ' + Object.keys(pj.platforms).join(', ') + '</li>';
+            html += '</ul>';
+            setCheckState('pact', true, 'Manual check: valid');
+          } else {
+            html = '<p style="color:var(--error);font-family:var(--font-mono);font-size:0.85rem;">Invalid: missing "pact" or "site" fields.</p>';
+          }
+        } catch (e) {
+          html = '<p style="color:var(--error);font-family:var(--font-mono);font-size:0.85rem;">Invalid JSON: ' + escapeHtml(e.message) + '</p>';
+        }
+      } else if (type === 'llms') {
+        if (content.length > 10) {
+          html = '<p style="color:var(--success);font-family:var(--font-mono);font-size:0.85rem;">llms.txt content detected (' + content.length + ' chars).</p>';
+          setCheckState('llms', true, 'Manual check: found');
+        } else {
+          html = '<p style="color:var(--warning);font-family:var(--font-mono);font-size:0.85rem;">Content seems too short for llms.txt.</p>';
+        }
+      } else if (type === 'robots') {
+        var hasAI = /GPTBot|ChatGPT|anthropic|Claude|CCBot|Google-Extended|AI/i.test(content);
+        if (hasAI) {
+          html = '<p style="color:var(--success);font-family:var(--font-mono);font-size:0.85rem;">AI agent directives detected in robots.txt.</p>';
+          setCheckState('robots', true, 'Manual check: AI directives found');
+        } else {
+          html = '<p style="color:var(--warning);font-family:var(--font-mono);font-size:0.85rem;">No AI-specific directives found. Look for GPTBot, ChatGPT-User, anthropic-ai, etc.</p>';
+          setCheckState('robots', false, 'Manual check: no AI directives');
+        }
+      } else if (type === 'response') {
+        try {
+          var resp = JSON.parse(content);
+          var hasPactField = !!resp.$pact;
+          var hasS = !!resp.$s || !!resp.$layout;
+
+          if (hasPactField && hasS) {
+            html = '<p style="color:var(--success);font-family:var(--font-mono);font-size:0.85rem;">Valid PACT response.</p>';
+            html += '<ul class="result-list" style="margin-top:0.5rem;">';
+            html += '<li><span class="icon icon--pass">[ok]</span> Version: ' + resp.$pact + '</li>';
+            if (resp.$s) html += '<li><span class="icon icon--pass">[ok]</span> Schema: ' + resp.$s + '</li>';
+            if (resp.$t) html += '<li><span class="icon icon--pass">[ok]</span> Timestamp: ' + new Date(resp.$t * 1000).toISOString() + '</li>';
+            if (resp.$ttl) html += '<li><span class="icon icon--pass">[ok]</span> TTL: ' + resp.$ttl + 's</li>';
+            if (resp.items) html += '<li><span class="icon icon--pass">[ok]</span> Items: ' + resp.items.length + '</li>';
+            if (resp.$layout === 'table') html += '<li><span class="icon icon--pass">[ok]</span> Table layout: ' + (resp.cols||[]).length + ' cols, ' + (resp.rows||[]).length + ' rows</li>';
+            if (typeof resp.total === 'number') html += '<li><span class="icon icon--pass">[ok]</span> Total: ' + resp.total + '</li>';
+            html += '</ul>';
+            setCheckState('valid', true, 'Manual check: valid response');
+          } else {
+            html = '<p style="color:var(--error);font-family:var(--font-mono);font-size:0.85rem;">Invalid PACT response: missing "$pact" or "$s"/"$layout".</p>';
+          }
+        } catch (e) {
+          html = '<p style="color:var(--error);font-family:var(--font-mono);font-size:0.85rem;">Invalid JSON: ' + escapeHtml(e.message) + '</p>';
+        }
+      }
+
+      resultDiv.innerHTML = html;
+    }
+
+    function clearManual() {
+      document.getElementById('manualInput').value = '';
+      document.getElementById('manualResult').innerHTML = '';
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:news/article@1",
+  "description": "A news or editorial article with publication metadata, body content, categorization, and estimated reading time.",
+  "keys": {
+    "t": { "full": "title", "type": "string", "required": true },
+    "auth": { "full": "author", "type": "string", "required": false },
+    "pub": { "full": "published", "type": "string", "required": true },
+    "upd": { "full": "updated", "type": "string", "required": false },
+    "sum": { "full": "summary", "type": "string", "required": false },
+    "body": { "full": "body", "type": "string", "required": false },
+    "cat": { "full": "category", "type": "string", "required": false },
+    "tags": { "full": "tags", "type": "array", "required": false },
+    "img": { "full": "image", "type": "url", "required": false, "layer": "media" },
+    "src": { "full": "source", "type": "string", "required": false },
+    "url": { "full": "url", "type": "url", "required": false },
+    "lang": { "full": "language", "type": "string", "required": false },
+    "rt": { "full": "reading_time", "type": "integer", "required": false }
+  }
+}

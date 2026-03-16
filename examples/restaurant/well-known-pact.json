@@ -1,0 +1,16 @@
+{
+  "pact": "1.0",
+  "site": "foodguide.example.com",
+  "description": "Restaurant directory with menus, reviews, and reservations",
+  "schemas": ["pact:food/restaurant@1"],
+  "endpoints": {
+    "pact:food/restaurant@1": {
+      "list": "/pact/restaurants",
+      "item": "/pact/restaurants/{id}",
+      "search": "/pact/restaurants?q={query}"
+    }
+  },
+  "rate_limit": { "rpm": 90, "burst": 15 },
+  "auth": { "type": "api_key", "register": "https://foodguide.example.com/developers" },
+  "license": { "ai_input": true, "ai_train": false, "attribution": true }
+}

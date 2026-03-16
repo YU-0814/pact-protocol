@@ -1,0 +1,17 @@
+{
+  "pact": "1.0",
+  "site": "pricefinder.kr",
+  "description": "AI-friendly price comparison marketplace for Korean markets",
+  "schemas": ["pact:commerce/product@1"],
+  "endpoints": {
+    "pact:commerce/product@1": {
+      "list": "/pact/products",
+      "item": "/pact/products/{id}",
+      "search": "/pact/products?q={query}"
+    }
+  },
+  "rate_limit": { "rpm": 60, "burst": 10 },
+  "auth": { "type": "public" },
+  "license": { "ai_input": true, "ai_train": false, "attribution": true },
+  "mcp_server": "npx @pricefinder/mcp-server"
+}

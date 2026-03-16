@@ -1,0 +1,25 @@
+{
+  "$schema": "https://pact.dev/meta@1",
+  "id": "pact:commerce/product@1",
+  "description": "A product listing for e-commerce and marketplace contexts. Supports pricing, merchant info, ratings, shipping, and structured specifications.",
+  "keys": {
+    "n": { "full": "name", "type": "string", "required": true },
+    "p": { "full": "price", "type": "number", "required": true },
+    "cur": { "full": "currency", "type": "string", "required": false, "default": "USD" },
+    "img": { "full": "image", "type": "url", "required": false, "layer": "media" },
+    "url": { "full": "buy_url", "type": "url", "required": false, "layer": "action" },
+    "m": { "full": "merchant", "type": "string", "required": false },
+    "r": { "full": "rating", "type": "number", "required": false, "range": [0, 5] },
+    "rv": { "full": "reviews", "type": "integer", "required": false },
+    "s": { "full": "shipping", "type": "string", "required": false },
+    "stk": { "full": "in_stock", "type": "boolean", "required": false },
+    "disc": { "full": "discount", "type": "number", "required": false },
+    "brand": { "full": "brand", "type": "string", "required": false },
+    "spec": { "full": "specs", "type": "object", "required": false },
+    "cat": { "full": "category", "type": "string", "required": false },
+    "desc": { "full": "description", "type": "string", "required": false },
+    "sku": { "full": "sku", "type": "string", "required": false },
+    "cond": { "full": "condition", "type": "string", "required": false },
+    "avail": { "full": "availability", "type": "string", "required": false }
+  }
+}
