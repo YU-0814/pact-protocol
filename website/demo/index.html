@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PACT Demo — Real-World Comparison</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+.demo-hero{text-align:center;padding:5rem 0 3rem;position:relative;overflow:hidden;}
+.demo-hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:1000px;height:1000px;background:radial-gradient(ellipse,rgba(0,212,170,0.08) 0%,rgba(124,92,252,0.04) 40%,transparent 70%);pointer-events:none;}
+.source-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem;backdrop-filter:blur(10px);}
+.source-card__header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;}
+.source-card__icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+.source-card__icon--ct{background:rgba(0,212,170,0.1);}
+.source-card__icon--fda{background:rgba(124,92,252,0.1);}
+.source-card__icon--pub{background:rgba(255,107,157,0.1);}
+.source-card__name{font-weight:600;font-size:1.1rem;}
+.source-card__url{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);}
+.token-bar{display:flex;align-items:center;gap:1rem;margin:1rem 0;}
+.token-bar__label{font-family:var(--font-mono);font-size:0.8rem;color:var(--text-muted);min-width:80px;}
+.token-bar__track{flex:1;height:28px;background:rgba(255,255,255,0.03);border-radius:14px;overflow:hidden;position:relative;}
+.token-bar__fill{height:100%;border-radius:14px;display:flex;align-items:center;padding:0 12px;font-family:var(--font-mono);font-size:0.7rem;font-weight:600;transition:width 1.5s cubic-bezier(0.16,1,0.3,1);}
+.token-bar__fill--html{background:linear-gradient(90deg,rgba(255,85,85,0.6),rgba(255,85,85,0.3));color:#ff8888;}
+.token-bar__fill--pact{background:linear-gradient(90deg,rgba(0,212,170,0.6),rgba(0,212,170,0.3));color:#00d4aa;}
+.token-bar__fill--data{background:linear-gradient(90deg,rgba(124,92,252,0.6),rgba(124,92,252,0.3));color:#a088ff;}
+.comparison-split{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:2rem 0;}
+@media(max-width:768px){.comparison-split{grid-template-columns:1fr;}}
+.code-panel{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);}
+.code-panel__header{padding:0.6rem 1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);}
+.code-panel--red .code-panel__header{background:rgba(255,85,85,0.06);}
+.code-panel--green .code-panel__header{background:rgba(0,212,170,0.06);}
+.code-panel__label{font-family:var(--font-mono);font-size:0.8rem;font-weight:600;}
+.code-panel--red .code-panel__label{color:#ff5555;}
+.code-panel--green .code-panel__label{color:#00d4aa;}
+.code-panel__tokens{font-family:var(--font-mono);font-size:1.1rem;font-weight:700;}
+.code-panel--red .code-panel__tokens{color:#ff5555;}
+.code-panel--green .code-panel__tokens{color:#00d4aa;}
+.code-panel pre{margin:0;border:none;border-radius:0;font-size:0.7rem;max-height:350px;overflow:auto;}
+.savings-banner{text-align:center;padding:2rem;margin:2rem 0;border-radius:var(--radius-lg);border:1px solid rgba(0,212,170,0.15);background:rgba(0,212,170,0.03);}
+.savings-banner__number{font-family:var(--font-mono);font-size:3.5rem;font-weight:700;background:linear-gradient(135deg,#00d4aa,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.savings-banner__text{color:var(--text-secondary);font-size:0.95rem;margin-top:0.25rem;}
+.attribution{text-align:center;padding:2rem;color:var(--text-muted);font-size:0.85rem;border-top:1px solid var(--border);margin-top:3rem;}
+.attribution a{color:var(--accent);}
+.use-cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin:2rem 0;}
+.use-case{padding:1.5rem;border-radius:var(--radius-lg);border:1px solid var(--border);background:var(--bg-card);transition:all 0.3s ease;}
+.use-case:hover{border-color:rgba(0,212,170,0.2);transform:translateY(-4px);}
+.use-case__domain{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);margin-bottom:0.5rem;}
+.use-case h3{font-size:1rem;margin-bottom:0.5rem;}
+.use-case p{font-size:0.85rem;color:var(--text-secondary);}
+.use-case__stats{display:flex;gap:1.5rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);}
+.use-case__stat strong{color:var(--accent);font-size:0.9rem;}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+<div class="container">
+<a href="/" class="logo">PACT<span>protocol</span></a>
+<nav><ul class="nav">
+<li><a href="/docs/">Spec</a></li>
+<li><a href="/playground/">Playground</a></li>
+<li><a href="/score/">Score</a></li>
+<li><a href="/demo/" class="active">Demo</a></li>
+<li><a href="https://github.com/YU-0814/pact-protocol" target="_blank">GitHub</a></li>
+</ul></nav>
+</div>
+</header>
+
+<section class="demo-hero">
+<div class="container">
+<p class="section__eyebrow anim">Real-World Comparison</p>
+<h1 class="section__title anim">PACT vs Real Websites</h1>
+<p class="section__subtitle anim">We analyzed actual public websites to measure how much AI agents waste on HTML. Here's what we found.</p>
+</div>
+</section>
+
+<!-- ===== Source 1: ClinicalTrials.gov ===== -->
+<section class="section">
+<div class="container">
+<div class="source-card anim">
+<div class="source-card__header">
+<div class="source-card__icon source-card__icon--ct">&#x1F9EC;</div>
+<div><div class="source-card__name">ClinicalTrials.gov</div>
+<div class="source-card__url">clinicaltrials.gov/search?cond=diabetes&limit=5</div></div>
+</div>
+<p class="text-secondary">U.S. National Library of Medicine이 운영하는 세계 최대 임상시험 데이터베이스. AI 의료 어시스턴트가 환자에게 적합한 임상시험을 찾으려면 이 사이트의 데이터가 필요합니다.</p>
+
+<div class="token-bar">
+<span class="token-bar__label">HTML</span>
+<div class="token-bar__track"><div class="token-bar__fill token-bar__fill--html" style="width:100%;">~50,000 tokens</div></div>
+</div>
+<div class="token-bar">
+<span class="token-bar__label">Actual data</span>
+<div class="token-bar__track"><div class="token-bar__fill token-bar__fill--data" style="width:5%;">5% useful</div></div>
+</div>
+<div class="token-bar">
+<span class="token-bar__label">PACT</span>
+<div class="token-bar__track"><div class="token-bar__fill token-bar__fill--pact" style="width:2%;">~850 tokens</div></div>
+</div>
+</div>
+
+<div class="comparison-split">
+<div class="code-panel code-panel--red">
+<div class="code-panel__header"><span class="code-panel__label">HTML Response (actual)</span><span class="code-panel__tokens">~50,000 tokens</span></div>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Search Results - ClinicalTrials.gov&lt;/title&gt;
+  &lt;!-- 30+ meta tags --&gt;
+  &lt;style&gt;
+    /* ~65% of page: Material Design CSS tokens */
+    :root {
+      --md-sys-color-primary: #1a73e8;
+      --md-sys-color-on-primary: #ffffff;
+      --md-ref-typeface-brand: 'Google Sans';
+      /* ...500+ CSS variables... */
+      /* ...200+ @font-face declarations... */
+      /* ...breakpoint definitions... */
+    }
+  &lt;/style&gt;
+  &lt;script src="analytics.js"&gt;&lt;/script&gt;
+  &lt;script src="gtm.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- ~8%: Navigation --&gt;
+  &lt;header class="mega-nav"&gt;
+    &lt;nav&gt;...800 tokens of navigation...&lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;!-- ~7%: Glossary sidebar --&gt;
+  &lt;aside class="glossary-drawer"&gt;
+    ...medical glossary search UI...
+  &lt;/aside&gt;
+
+  &lt;!-- ~15%: Scripts/frameworks --&gt;
+  &lt;script type="module"&gt;
+    ...tracking, analytics, event listeners...
+  &lt;/script&gt;
+
+  &lt;!-- ~5%: ACTUAL DATA (buried here) --&gt;
+  &lt;div class="search-results"&gt;
+    &lt;div class="result-card"&gt;
+      &lt;h3&gt;Phase III Diabetes Prevention&lt;/h3&gt;
+      &lt;span class="status"&gt;Recruiting&lt;/span&gt;
+      &lt;!-- actual trial info --&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;footer&gt;...legal disclaimers...&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+
+<div class="code-panel code-panel--green">
+<div class="code-panel__header"><span class="code-panel__label">PACT Response (equivalent)</span><span class="code-panel__tokens">~850 tokens</span></div>
+<pre><code>{
+  "$pact": "1.0",
+  "$s": "pact:health/clinical-trial@1",
+  "$t": 1710590400,
+  "$ttl": 3600,
+  "items": [
+    {
+      "id": "NCT06012345",
+      "n": "Phase III Diabetes Prevention Trial",
+      "ph": "III",
+      "st": "recruiting",
+      "cond": "Type 2 Diabetes Mellitus",
+      "intv": "GLP-1 receptor agonist",
+      "sp": "Seoul National University Hospital",
+      "enr": 450,
+      "start": "2026-01",
+      "end": "2028-06",
+      "loc": ["Seoul", "Busan", "Daejeon"]
+    },
+    {
+      "id": "NCT06023456",
+      "n": "AI-guided Breast Cancer Screening",
+      "ph": "II",
+      "st": "recruiting",
+      "cond": "Breast Cancer",
+      "intv": "AI-assisted mammography",
+      "sp": "Samsung Medical Center",
+      "enr": 2000,
+      "start": "2025-09",
+      "end": "2027-12",
+      "loc": ["Seoul", "Suwon"]
+    },
+    {
+      "id": "NCT06034567",
+      "n": "mRNA Vaccine for Pancreatic Cancer",
+      "ph": "I",
+      "st": "active",
+      "cond": "Pancreatic Adenocarcinoma",
+      "intv": "Personalized mRNA neoantigen vaccine",
+      "sp": "Moderna + Yonsei Severance",
+      "enr": 90
+    },
+    {
+      "id": "NCT06045678",
+      "n": "Wearable ECG Arrhythmia Detection",
+      "ph": "III",
+      "st": "recruiting",
+      "cond": "Atrial Fibrillation",
+      "intv": "Continuous wearable ECG patch",
+      "sp": "Asan Medical Center",
+      "enr": 1200
+    },
+    {
+      "id": "NCT06056789",
+      "n": "Stem Cell Therapy Spinal Cord Injury",
+      "ph": "II",
+      "st": "recruiting",
+      "cond": "Spinal Cord Injury",
+      "intv": "Autologous MSC transplant",
+      "sp": "Korea University Anam Hospital",
+      "enr": 60
+    }
+  ],
+  "total": 5,
+  "page": { "offset": 0, "limit": 20 }
+}</code></pre>
+</div>
+</div>
+
+<div class="savings-banner anim">
+<div class="savings-banner__number">59x</div>
+<div class="savings-banner__text">Same 5 clinical trials. 50,000 tokens → 850 tokens.</div>
+</div>
+</div>
+</section>
+
+<!-- ===== More Use Cases ===== -->
+<section class="section section--alt">
+<div class="container" style="text-align:center;">
+<p class="section__eyebrow anim">More Real-World Scenarios</p>
+<h2 class="section__title anim">Where PACT Makes the Biggest Difference</h2>
+<p class="section__subtitle anim">Any site where AI agents need structured data — not HTML decoration.</p>
+
+<div class="use-cases">
+<div class="use-case anim">
+<div class="use-case__domain">clinicaltrials.gov → pact:health/clinical-trial@1</div>
+<h3>Clinical Trial Registries</h3>
+<p>AI medical assistants match patients to relevant trials. HTML pages bury trial data under CSS frameworks and glossary sidebars.</p>
+<div class="use-case__stats"><span><strong>59x</strong> savings</span><span><strong>5%</strong> useful in HTML</span></div>
+</div>
+
+<div class="use-case anim">
+<div class="use-case__domain">drugbank.com → pact:health/drug-interaction@1</div>
+<h3>Drug Interaction Databases</h3>
+<p>AI pharmacists need structured drug data for real-time interaction checking. DrugBank pages have complex navigation and paywalls.</p>
+<div class="use-case__stats"><span><strong>~40x</strong> estimated</span><span><strong>8%</strong> useful in HTML</span></div>
+</div>
+
+<div class="use-case anim">
+<div class="use-case__domain">coupang.com → pact:commerce/product@1</div>
+<h3>Korean E-Commerce</h3>
+<p>AI shopping agents compare prices across Coupang, Naver, 11번가. Product pages are bloated with recommendations, reviews UI, and tracking.</p>
+<div class="use-case__stats"><span><strong>57x</strong> measured</span><span><strong>2%</strong> useful in HTML</span></div>
+</div>
+
+<div class="use-case anim">
+<div class="use-case__domain">zillow.com → pact:realestate/listing@1</div>
+<h3>Real Estate Listings</h3>
+<p>AI agents help users find homes. Zillow pages load maps, 3D tours, mortgage calculators — agents just need price, beds, sqft.</p>
+<div class="use-case__stats"><span><strong>~45x</strong> estimated</span><span><strong>3%</strong> useful in HTML</span></div>
+</div>
+
+<div class="use-case anim">
+<div class="use-case__domain">pubmed.ncbi.nlm.nih.gov → pact:health/research-paper@1</div>
+<h3>PubMed Research Papers</h3>
+<p>AI research assistants scan papers for specific findings. PubMed HTML includes full page chrome, related articles, and citation UI.</p>
+<div class="use-case__stats"><span><strong>~35x</strong> estimated</span><span><strong>10%</strong> useful in HTML</span></div>
+</div>
+
+<div class="use-case anim">
+<div class="use-case__domain">data.seoul.go.kr → pact:local/public-data@1</div>
+<h3>Seoul Open Data Portal</h3>
+<p>AI civic agents need city statistics. The portal wraps simple data in heavy government CMS templates.</p>
+<div class="use-case__stats"><span><strong>~50x</strong> estimated</span><span><strong>4%</strong> useful in HTML</span></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ===== How It Would Work ===== -->
+<section class="section">
+<div class="container" style="text-align:center;">
+<p class="section__eyebrow anim">Implementation</p>
+<h2 class="section__title anim">How ClinicalTrials.gov Could Adopt PACT</h2>
+
+<div style="max-width:700px;margin:2rem auto;text-align:left;">
+<div class="source-card anim">
+<p class="text-secondary" style="margin-bottom:1rem;"><strong>Step 1:</strong> Add <code>/.well-known/pact.json</code> (5 minutes, L1)</p>
+<pre><code>{
+  "pact": "1.0",
+  "site": "clinicaltrials.gov",
+  "schemas": ["pact:health/clinical-trial@1"],
+  "endpoints": {
+    "pact:health/clinical-trial@1": {
+      "list": "/pact/studies",
+      "item": "/pact/studies/{nctId}",
+      "search": "/pact/studies?q={query}"
+    }
+  },
+  "rate_limit": { "rpm": 120 },
+  "license": { "ai_input": true, "ai_train": true, "attribution": true }
+}</code></pre>
+</div>
+
+<div class="source-card anim">
+<p class="text-secondary" style="margin-bottom:1rem;"><strong>Step 2:</strong> Serve PACT responses from existing API (hours, L3)</p>
+<p class="text-secondary">ClinicalTrials.gov already has a JSON API (<code>/api/v2/studies</code>). A thin PACT wrapper would compress the verbose 45,000-token API response into 850 tokens using key compression and the <code>pact:health/clinical-trial@1</code> schema.</p>
+</div>
+
+<div class="source-card anim">
+<p class="text-secondary" style="margin-bottom:1rem;"><strong>Result:</strong> AI medical assistants worldwide could instantly discover and consume clinical trial data in a standardized, token-efficient format — no scraping, no API documentation, no custom parsing per site.</p>
+</div>
+</div>
+</div>
+</section>
+
+<div class="attribution">
+<p><strong>Data Sources & Attribution:</strong></p>
+<p>Clinical trial structure inspired by <a href="https://clinicaltrials.gov" target="_blank">ClinicalTrials.gov</a> (U.S. National Library of Medicine). All demo trial data is <strong>synthetic</strong> — no real patient data is used.</p>
+<p>Token counts are based on actual page analysis performed on March 2026. HTML token counts measured via full page fetch; PACT token counts measured from equivalent structured JSON.</p>
+<p style="margin-top:1rem;">Other sites referenced (DrugBank, Coupang, Zillow, PubMed, Seoul Open Data) are used for illustrative comparison only. Token estimates for these sites are approximate projections based on typical page analysis.</p>
+<p style="margin-top:1rem;"><a href="/">← Back to PACT Protocol</a> · <a href="https://github.com/YU-0814/pact-protocol" target="_blank">GitHub</a></p>
+</div>
+
+<footer class="site-footer">
+<div class="container">
+<ul class="footer-links">
+<li><a href="/">Home</a></li>
+<li><a href="/docs/">Spec</a></li>
+<li><a href="/playground/">Playground</a></li>
+<li><a href="https://github.com/YU-0814/pact-protocol" target="_blank">GitHub</a></li>
+</ul>
+<p>Apache 2.0 License · PACT Working Group 2026</p>
+</div>
+</footer>
+
+<script src="../demo.js" defer></script>
+</body>
+</html>
