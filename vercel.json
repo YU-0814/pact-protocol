@@ -10,6 +10,7 @@
     { "source": "/docs/ko", "destination": "/docs/ko.html" },
     { "source": "/playground/ko", "destination": "/playground/ko.html" },
     { "source": "/score/ko", "destination": "/score/ko.html" },
-    { "source": "/demo", "destination": "/demo/index.html" }
+    { "source": "/demo", "destination": "/demo/index.html" },
+    { "source": "/demo/ko", "destination": "/demo/ko.html" }
   ]
 }

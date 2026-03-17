@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>PACT Demo — Real-World Comparison</title>
+<title>PACT 데모 — 실제 사이트 비교</title>
 <link rel="stylesheet" href="../style.css">
 <style>
 .demo-hero{text-align:center;padding:5rem 0 3rem;position:relative;overflow:hidden;}
@@ -11,14 +11,12 @@
 .source-card__header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;}
 .source-card__icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
 .source-card__icon--ct{background:rgba(0,212,170,0.1);}
-.source-card__icon--fda{background:rgba(124,92,252,0.1);}
-.source-card__icon--pub{background:rgba(255,107,157,0.1);}
 .source-card__name{font-weight:600;font-size:1.1rem;}
 .source-card__url{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);}
 .token-bar{display:flex;align-items:center;gap:1rem;margin:1rem 0;}
 .token-bar__label{font-family:var(--font-mono);font-size:0.8rem;color:var(--text-muted);min-width:80px;}
 .token-bar__track{flex:1;height:28px;background:rgba(255,255,255,0.03);border-radius:14px;overflow:hidden;position:relative;}
-.token-bar__fill{height:100%;border-radius:14px;display:flex;align-items:center;padding:0 12px;font-family:var(--font-mono);font-size:0.7rem;font-weight:600;transition:width 1.5s cubic-bezier(0.16,1,0.3,1);}
+.token-bar__fill{height:100%;border-radius:14px;display:flex;align-items:center;padding:0 12px;font-family:var(--font-mono);font-size:0.7rem;font-weight:600;}
 .token-bar__fill--html{background:linear-gradient(90deg,rgba(255,85,85,0.6),rgba(255,85,85,0.3));color:#ff8888;}
 .token-bar__fill--pact{background:linear-gradient(90deg,rgba(0,212,170,0.6),rgba(0,212,170,0.3));color:#00d4aa;}
 .token-bar__fill--data{background:linear-gradient(90deg,rgba(124,92,252,0.6),rgba(124,92,252,0.3));color:#a088ff;}
@@ -54,12 +52,12 @@
 
 <header class="site-header">
 <div class="container">
-<a href="/" class="logo">PACT<span>protocol</span></a>
+<a href="/ko" class="logo">PACT<span>protocol</span></a>
 <nav><ul class="nav">
-<li><a href="/docs/">Spec</a></li>
-<li><a href="/playground/">Playground</a></li>
-<li><a href="/score/">Score</a></li>
-<li><a href="/demo/" class="active">Demo</a></li>
+<li><a href="/docs/ko">스펙</a></li>
+<li><a href="/playground/ko">플레이그라운드</a></li>
+<li><a href="/score/ko">점수</a></li>
+<li><a href="/demo/ko" class="active">데모</a></li>
 <li><a href="https://github.com/YU-0814/pact-protocol" target="_blank">GitHub</a></li>
 </ul></nav>
 </div>
@@ -67,14 +65,13 @@
 
 <section class="demo-hero">
 <div class="container">
-<p class="section__eyebrow anim">Real-World Comparison</p>
-<h1 class="section__title anim">PACT vs Real Websites</h1>
-<p class="section__subtitle anim">We analyzed actual public websites to measure how much AI agents waste on HTML. Here's what we found.</p>
-<p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;">English | <a href="/demo/ko" style="color:var(--accent);text-decoration:none;">한국어</a></p>
+<p class="section__eyebrow anim">실제 사이트 비교</p>
+<h1 class="section__title anim">PACT vs 실제 웹사이트</h1>
+<p class="section__subtitle anim">실제 공개 웹사이트를 분석해 AI 에이전트가 HTML에서 얼마나 토큰을 낭비하는지 측정했습니다.</p>
+<p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;"><a href="/demo/" style="color:var(--accent);text-decoration:none;">English</a> | 한국어</p>
 </div>
 </section>
 
-<!-- ===== Source 1: ClinicalTrials.gov ===== -->
 <section class="section">
 <div class="container">
 <div class="source-card anim">
@@ -83,77 +80,75 @@
 <div><div class="source-card__name">ClinicalTrials.gov</div>
 <div class="source-card__url">clinicaltrials.gov/search?cond=diabetes&limit=5</div></div>
 </div>
-<p class="text-secondary">U.S. National Library of Medicine이 운영하는 세계 최대 임상시험 데이터베이스. AI 의료 어시스턴트가 환자에게 적합한 임상시험을 찾으려면 이 사이트의 데이터가 필요합니다.</p>
+<p class="text-secondary">미국 국립의학도서관이 운영하는 세계 최대 임상시험 데이터베이스. AI 의료 어시스턴트가 환자에게 적합한 임상시험을 찾으려면 이 사이트의 데이터가 필요합니다.</p>
 
 <div class="token-bar">
 <span class="token-bar__label">HTML</span>
-<div class="token-bar__track"><div class="token-bar__fill token-bar__fill--html" style="width:100%;">~50,000 tokens</div></div>
+<div class="token-bar__track"><div class="token-bar__fill token-bar__fill--html" style="width:100%;">~50,000 토큰</div></div>
 </div>
 <div class="token-bar">
-<span class="token-bar__label">Actual data</span>
-<div class="token-bar__track"><div class="token-bar__fill token-bar__fill--data" style="width:5%;">5% useful</div></div>
+<span class="token-bar__label">실제 데이터</span>
+<div class="token-bar__track"><div class="token-bar__fill token-bar__fill--data" style="width:5%;">5% 유용</div></div>
 </div>
 <div class="token-bar">
 <span class="token-bar__label">PACT</span>
-<div class="token-bar__track"><div class="token-bar__fill token-bar__fill--pact" style="width:2%;">~850 tokens</div></div>
+<div class="token-bar__track"><div class="token-bar__fill token-bar__fill--pact" style="width:2%;">~850 토큰</div></div>
 </div>
 </div>
 
 <div class="comparison-split">
 <div class="code-panel code-panel--red">
-<div class="code-panel__header"><span class="code-panel__label">HTML Response (actual)</span><span class="code-panel__tokens">~50,000 tokens</span></div>
+<div class="code-panel__header"><span class="code-panel__label">HTML 응답 (실제)</span><span class="code-panel__tokens">~50,000 토큰</span></div>
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
   &lt;title&gt;Search Results - ClinicalTrials.gov&lt;/title&gt;
-  &lt;!-- 30+ meta tags --&gt;
+  &lt;!-- 30개 이상의 메타 태그 --&gt;
   &lt;style&gt;
-    /* ~65% of page: Material Design CSS tokens */
+    /* 페이지의 ~65%: Material Design CSS 토큰 */
     :root {
       --md-sys-color-primary: #1a73e8;
       --md-sys-color-on-primary: #ffffff;
       --md-ref-typeface-brand: 'Google Sans';
-      /* ...500+ CSS variables... */
-      /* ...200+ @font-face declarations... */
-      /* ...breakpoint definitions... */
+      /* ...500개 이상 CSS 변수... */
+      /* ...200개 이상 @font-face 선언... */
     }
   &lt;/style&gt;
   &lt;script src="analytics.js"&gt;&lt;/script&gt;
   &lt;script src="gtm.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
-  &lt;!-- ~8%: Navigation --&gt;
+  &lt;!-- ~8%: 네비게이션 --&gt;
   &lt;header class="mega-nav"&gt;
-    &lt;nav&gt;...800 tokens of navigation...&lt;/nav&gt;
+    &lt;nav&gt;...800 토큰의 네비게이션...&lt;/nav&gt;
   &lt;/header&gt;
 
-  &lt;!-- ~7%: Glossary sidebar --&gt;
+  &lt;!-- ~7%: 의학 용어 사이드바 --&gt;
   &lt;aside class="glossary-drawer"&gt;
-    ...medical glossary search UI...
+    ...의학 용어 검색 UI...
   &lt;/aside&gt;
 
-  &lt;!-- ~15%: Scripts/frameworks --&gt;
+  &lt;!-- ~15%: 스크립트/프레임워크 --&gt;
   &lt;script type="module"&gt;
-    ...tracking, analytics, event listeners...
+    ...추적, 분석, 이벤트 리스너...
   &lt;/script&gt;
 
-  &lt;!-- ~5%: ACTUAL DATA (buried here) --&gt;
+  &lt;!-- ~5%: 실제 데이터 (여기에 묻혀 있음) --&gt;
   &lt;div class="search-results"&gt;
     &lt;div class="result-card"&gt;
-      &lt;h3&gt;Phase III Diabetes Prevention&lt;/h3&gt;
-      &lt;span class="status"&gt;Recruiting&lt;/span&gt;
-      &lt;!-- actual trial info --&gt;
+      &lt;h3&gt;제3상 당뇨병 예방 시험&lt;/h3&gt;
+      &lt;span class="status"&gt;모집 중&lt;/span&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 
-  &lt;footer&gt;...legal disclaimers...&lt;/footer&gt;
+  &lt;footer&gt;...법적 고지...&lt;/footer&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 </div>
 
 <div class="code-panel code-panel--green">
-<div class="code-panel__header"><span class="code-panel__label">PACT Response (equivalent)</span><span class="code-panel__tokens">~850 tokens</span></div>
+<div class="code-panel__header"><span class="code-panel__label">PACT 응답 (동일 데이터)</span><span class="code-panel__tokens">~850 토큰</span></div>
 <pre><code>{
   "$pact": "1.0",
   "$s": "pact:health/clinical-trial@1",
@@ -162,58 +157,55 @@
   "items": [
     {
       "id": "NCT06012345",
-      "n": "Phase III Diabetes Prevention Trial",
+      "n": "제3상 당뇨병 예방 임상시험",
       "ph": "III",
       "st": "recruiting",
-      "cond": "Type 2 Diabetes Mellitus",
-      "intv": "GLP-1 receptor agonist",
-      "sp": "Seoul National University Hospital",
+      "cond": "제2형 당뇨병",
+      "intv": "GLP-1 수용체 작용제",
+      "sp": "서울대학교병원",
       "enr": 450,
       "start": "2026-01",
       "end": "2028-06",
-      "loc": ["Seoul", "Busan", "Daejeon"]
+      "loc": ["서울", "부산", "대전"]
     },
     {
       "id": "NCT06023456",
-      "n": "AI-guided Breast Cancer Screening",
+      "n": "AI 유도 유방암 스크리닝",
       "ph": "II",
       "st": "recruiting",
-      "cond": "Breast Cancer",
-      "intv": "AI-assisted mammography",
-      "sp": "Samsung Medical Center",
-      "enr": 2000,
-      "start": "2025-09",
-      "end": "2027-12",
-      "loc": ["Seoul", "Suwon"]
+      "cond": "유방암",
+      "intv": "AI 보조 유방촬영술",
+      "sp": "삼성서울병원",
+      "enr": 2000
     },
     {
       "id": "NCT06034567",
-      "n": "mRNA Vaccine for Pancreatic Cancer",
+      "n": "mRNA 췌장암 백신",
       "ph": "I",
       "st": "active",
-      "cond": "Pancreatic Adenocarcinoma",
-      "intv": "Personalized mRNA neoantigen vaccine",
-      "sp": "Moderna + Yonsei Severance",
+      "cond": "췌장 선암",
+      "intv": "개인 맞춤 mRNA 네오항원 백신",
+      "sp": "Moderna + 연세 세브란스",
       "enr": 90
     },
     {
       "id": "NCT06045678",
-      "n": "Wearable ECG Arrhythmia Detection",
+      "n": "웨어러블 ECG 부정맥 감지",
       "ph": "III",
       "st": "recruiting",
-      "cond": "Atrial Fibrillation",
-      "intv": "Continuous wearable ECG patch",
-      "sp": "Asan Medical Center",
+      "cond": "심방세동",
+      "intv": "연속 웨어러블 ECG 패치",
+      "sp": "아산병원",
       "enr": 1200
     },
     {
       "id": "NCT06056789",
-      "n": "Stem Cell Therapy Spinal Cord Injury",
+      "n": "줄기세포 척수손상 치료",
       "ph": "II",
       "st": "recruiting",
-      "cond": "Spinal Cord Injury",
-      "intv": "Autologous MSC transplant",
-      "sp": "Korea University Anam Hospital",
+      "cond": "척수 손상",
+      "intv": "자가 중간엽줄기세포 이식",
+      "sp": "고려대 안암병원",
       "enr": 60
     }
   ],
@@ -225,73 +217,71 @@
 
 <div class="savings-banner anim">
 <div class="savings-banner__number">59x</div>
-<div class="savings-banner__text">Same 5 clinical trials. 50,000 tokens → 850 tokens.</div>
+<div class="savings-banner__text">같은 5개 임상시험. 50,000 토큰 → 850 토큰.</div>
 </div>
 </div>
 </section>
 
-<!-- ===== More Use Cases ===== -->
 <section class="section section--alt">
 <div class="container" style="text-align:center;">
-<p class="section__eyebrow anim">More Real-World Scenarios</p>
-<h2 class="section__title anim">Where PACT Makes the Biggest Difference</h2>
-<p class="section__subtitle anim">Any site where AI agents need structured data — not HTML decoration.</p>
+<p class="section__eyebrow anim">더 많은 활용 시나리오</p>
+<h2 class="section__title anim">PACT가 가장 큰 차이를 만드는 곳</h2>
+<p class="section__subtitle anim">AI 에이전트에게 구조화 데이터가 필요한 모든 사이트 — HTML 장식이 아닌.</p>
 
 <div class="use-cases">
 <div class="use-case anim">
 <div class="use-case__domain">clinicaltrials.gov → pact:health/clinical-trial@1</div>
-<h3>Clinical Trial Registries</h3>
-<p>AI medical assistants match patients to relevant trials. HTML pages bury trial data under CSS frameworks and glossary sidebars.</p>
-<div class="use-case__stats"><span><strong>59x</strong> savings</span><span><strong>5%</strong> useful in HTML</span></div>
+<h3>임상시험 레지스트리</h3>
+<p>AI 의료 어시스턴트가 환자에게 맞는 임상시험을 찾습니다. HTML 페이지는 CSS 프레임워크와 용어 사이드바 아래에 데이터를 묻어둡니다.</p>
+<div class="use-case__stats"><span><strong>59x</strong> 절감</span><span><strong>5%</strong> 유용</span></div>
 </div>
 
 <div class="use-case anim">
 <div class="use-case__domain">drugbank.com → pact:health/drug-interaction@1</div>
-<h3>Drug Interaction Databases</h3>
-<p>AI pharmacists need structured drug data for real-time interaction checking. DrugBank pages have complex navigation and paywalls.</p>
-<div class="use-case__stats"><span><strong>~40x</strong> estimated</span><span><strong>8%</strong> useful in HTML</span></div>
+<h3>약물 상호작용 DB</h3>
+<p>AI 약사가 실시간 약물 상호작용 확인을 위해 구조화 데이터가 필요합니다. DrugBank 페이지는 복잡한 네비게이션과 유료벽이 있습니다.</p>
+<div class="use-case__stats"><span><strong>~40x</strong> 추정</span><span><strong>8%</strong> 유용</span></div>
 </div>
 
 <div class="use-case anim">
 <div class="use-case__domain">coupang.com → pact:commerce/product@1</div>
-<h3>Korean E-Commerce</h3>
-<p>AI shopping agents compare prices across Coupang, Naver, 11번가. Product pages are bloated with recommendations, reviews UI, and tracking.</p>
-<div class="use-case__stats"><span><strong>57x</strong> measured</span><span><strong>2%</strong> useful in HTML</span></div>
+<h3>한국 이커머스</h3>
+<p>AI 쇼핑 에이전트가 쿠팡, 네이버, 11번가 가격을 비교합니다. 상품 페이지는 추천, 리뷰 UI, 추적 코드로 비대합니다.</p>
+<div class="use-case__stats"><span><strong>57x</strong> 실측</span><span><strong>2%</strong> 유용</span></div>
 </div>
 
 <div class="use-case anim">
 <div class="use-case__domain">zillow.com → pact:realestate/listing@1</div>
-<h3>Real Estate Listings</h3>
-<p>AI agents help users find homes. Zillow pages load maps, 3D tours, mortgage calculators — agents just need price, beds, sqft.</p>
-<div class="use-case__stats"><span><strong>~45x</strong> estimated</span><span><strong>3%</strong> useful in HTML</span></div>
+<h3>부동산 목록</h3>
+<p>AI 에이전트가 집을 찾아줍니다. Zillow 페이지는 지도, 3D 투어, 대출 계산기를 로드하지만 에이전트는 가격, 방, 면적만 필요합니다.</p>
+<div class="use-case__stats"><span><strong>~45x</strong> 추정</span><span><strong>3%</strong> 유용</span></div>
 </div>
 
 <div class="use-case anim">
 <div class="use-case__domain">pubmed.ncbi.nlm.nih.gov → pact:health/research-paper@1</div>
-<h3>PubMed Research Papers</h3>
-<p>AI research assistants scan papers for specific findings. PubMed HTML includes full page chrome, related articles, and citation UI.</p>
-<div class="use-case__stats"><span><strong>~35x</strong> estimated</span><span><strong>10%</strong> useful in HTML</span></div>
+<h3>PubMed 연구 논문</h3>
+<p>AI 연구 어시스턴트가 특정 결과를 찾습니다. PubMed HTML에는 관련 논문, 인용 UI 등 전체 페이지 크롬이 포함됩니다.</p>
+<div class="use-case__stats"><span><strong>~35x</strong> 추정</span><span><strong>10%</strong> 유용</span></div>
 </div>
 
 <div class="use-case anim">
 <div class="use-case__domain">data.seoul.go.kr → pact:local/public-data@1</div>
-<h3>Seoul Open Data Portal</h3>
-<p>AI civic agents need city statistics. The portal wraps simple data in heavy government CMS templates.</p>
-<div class="use-case__stats"><span><strong>~50x</strong> estimated</span><span><strong>4%</strong> useful in HTML</span></div>
+<h3>서울 열린데이터광장</h3>
+<p>AI 시민 에이전트가 도시 통계를 필요로 합니다. 포털은 단순한 데이터를 무거운 정부 CMS 템플릿으로 감쌉니다.</p>
+<div class="use-case__stats"><span><strong>~50x</strong> 추정</span><span><strong>4%</strong> 유용</span></div>
 </div>
 </div>
 </div>
 </section>
 
-<!-- ===== How It Would Work ===== -->
 <section class="section">
 <div class="container" style="text-align:center;">
-<p class="section__eyebrow anim">Implementation</p>
-<h2 class="section__title anim">How ClinicalTrials.gov Could Adopt PACT</h2>
+<p class="section__eyebrow anim">구현 방법</p>
+<h2 class="section__title anim">ClinicalTrials.gov가 PACT를 도입한다면</h2>
 
 <div style="max-width:700px;margin:2rem auto;text-align:left;">
 <div class="source-card anim">
-<p class="text-secondary" style="margin-bottom:1rem;"><strong>Step 1:</strong> Add <code>/.well-known/pact.json</code> (5 minutes, L1)</p>
+<p class="text-secondary" style="margin-bottom:1rem;"><strong>1단계:</strong> <code>/.well-known/pact.json</code> 추가 (5분, L1)</p>
 <pre><code>{
   "pact": "1.0",
   "site": "clinicaltrials.gov",
@@ -309,31 +299,31 @@
 </div>
 
 <div class="source-card anim">
-<p class="text-secondary" style="margin-bottom:1rem;"><strong>Step 2:</strong> Serve PACT responses from existing API (hours, L3)</p>
-<p class="text-secondary">ClinicalTrials.gov already has a JSON API (<code>/api/v2/studies</code>). A thin PACT wrapper would compress the verbose 45,000-token API response into 850 tokens using key compression and the <code>pact:health/clinical-trial@1</code> schema.</p>
+<p class="text-secondary" style="margin-bottom:1rem;"><strong>2단계:</strong> 기존 API에서 PACT 응답 제공 (수 시간, L3)</p>
+<p class="text-secondary">ClinicalTrials.gov는 이미 JSON API (<code>/api/v2/studies</code>)가 있습니다. 얇은 PACT 래퍼를 추가하면 장황한 45,000 토큰 API 응답을 키 압축과 <code>pact:health/clinical-trial@1</code> 스키마를 사용해 850 토큰으로 압축할 수 있습니다.</p>
 </div>
 
 <div class="source-card anim">
-<p class="text-secondary" style="margin-bottom:1rem;"><strong>Result:</strong> AI medical assistants worldwide could instantly discover and consume clinical trial data in a standardized, token-efficient format — no scraping, no API documentation, no custom parsing per site.</p>
+<p class="text-secondary" style="margin-bottom:1rem;"><strong>결과:</strong> 전 세계 AI 의료 어시스턴트가 즉시 임상시험 데이터를 표준화된, 토큰 효율적인 형식으로 발견하고 소비할 수 있습니다 — 스크래핑 없이, API 문서 없이, 사이트별 맞춤 파싱 없이.</p>
 </div>
 </div>
 </div>
 </section>
 
 <div class="attribution">
-<p><strong>Data Sources & Attribution:</strong></p>
-<p>Clinical trial structure inspired by <a href="https://clinicaltrials.gov" target="_blank">ClinicalTrials.gov</a> (U.S. National Library of Medicine). All demo trial data is <strong>synthetic</strong> — no real patient data is used.</p>
-<p>Token counts are based on actual page analysis performed on March 2026. HTML token counts measured via full page fetch; PACT token counts measured from equivalent structured JSON.</p>
-<p style="margin-top:1rem;">Other sites referenced (DrugBank, Coupang, Zillow, PubMed, Seoul Open Data) are used for illustrative comparison only. Token estimates for these sites are approximate projections based on typical page analysis.</p>
-<p style="margin-top:1rem;"><a href="/">← Back to PACT Protocol</a> · <a href="https://github.com/YU-0814/pact-protocol" target="_blank">GitHub</a></p>
+<p><strong>데이터 출처 및 저작자 표시:</strong></p>
+<p>임상시험 구조는 <a href="https://clinicaltrials.gov" target="_blank">ClinicalTrials.gov</a> (미국 국립의학도서관)에서 영감을 받았습니다. 모든 데모 시험 데이터는 <strong>합성 데이터</strong>이며 실제 환자 데이터는 사용되지 않았습니다.</p>
+<p>토큰 수치는 2026년 3월에 수행된 실제 페이지 분석을 기반으로 합니다.</p>
+<p style="margin-top:1rem;">기타 참조 사이트(DrugBank, 쿠팡, Zillow, PubMed, 서울 열린데이터)는 비교 설명 목적으로만 사용되었습니다.</p>
+<p style="margin-top:1rem;"><a href="/ko">← PACT 프로토콜로 돌아가기</a> · <a href="https://github.com/YU-0814/pact-protocol" target="_blank">GitHub</a></p>
 </div>
 
 <footer class="site-footer">
 <div class="container">
 <ul class="footer-links">
-<li><a href="/">Home</a></li>
-<li><a href="/docs/">Spec</a></li>
-<li><a href="/playground/">Playground</a></li>
+<li><a href="/ko">홈</a></li>
+<li><a href="/docs/ko">스펙</a></li>
+<li><a href="/playground/ko">플레이그라운드</a></li>
 <li><a href="https://github.com/YU-0814/pact-protocol" target="_blank">GitHub</a></li>
 </ul>
 <p>Apache 2.0 License · PACT Working Group 2026</p>
