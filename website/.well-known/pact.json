@@ -1,14 +1,19 @@
 {
   "pact": "1.0",
-  "site": "pact-protocol.org",
-  "description": "Official PACT Protocol website - specification, playground, and tools for AI agent content delivery",
-  "schemas": ["pact:content/documentation@1"],
+  "site": "pact-protocol-alpha.vercel.app",
+  "description": "Official PACT Protocol website. PACT is the standard for delivering structured, token-efficient content to AI agents. This site provides the specification, interactive playground, AI visibility score tool, and real-world comparison demos.",
+  "schemas": [
+    "pact:content/documentation@1",
+    "pact:content/page@1"
+  ],
   "endpoints": {
-    "pact:content/documentation@1": {
-      "list": "/docs/",
+    "pact:content/page@1": {
+      "list": "/pact/pages",
       "search": "/playground/"
     }
   },
+  "rate_limit": { "rpm": 120 },
+  "auth": { "type": "public" },
   "license": { "ai_input": true, "ai_train": true, "attribution": true },
-  "conformance": "L1"
+  "conformance": "L2"
 }

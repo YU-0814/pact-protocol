@@ -67,6 +67,65 @@
     </div>
   </section>
 
+  <!-- ===== How It Works (Simple) ===== -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">How It Works</p>
+      <h2 class="section__title anim">PACT in Plain English</h2>
+      <p class="section__subtitle anim">No jargon. Just how it works.</p>
+
+      <div style="max-width:700px;margin:2rem auto;text-align:left;" class="anim">
+        <div class="source-card" style="margin-bottom:1.5rem;">
+          <h3 style="margin-bottom:0.75rem;">Think of it like a restaurant</h3>
+          <p class="text-secondary" style="margin-bottom:1rem;">A restaurant has two ways to serve food:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="padding:1rem;border-radius:var(--radius);border:1px solid rgba(255,85,85,0.2);background:rgba(255,85,85,0.03);">
+              <p style="font-weight:600;color:#ff8888;font-size:0.85rem;margin-bottom:0.5rem;">For dine-in customers</p>
+              <p class="text-secondary" style="font-size:0.85rem;">Menu with photos, decor, music, waiters, table setting — the full experience.</p>
+              <p style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">= HTML for browsers</p>
+            </div>
+            <div style="padding:1rem;border-radius:var(--radius);border:1px solid rgba(0,212,170,0.2);background:rgba(0,212,170,0.03);">
+              <p style="font-weight:600;color:var(--accent);font-size:0.85rem;margin-bottom:0.5rem;">For delivery apps</p>
+              <p class="text-secondary" style="font-size:0.85rem;">POS system: item name, price, availability — just the data.</p>
+              <p style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">= PACT for AI agents</p>
+            </div>
+          </div>
+          <p class="text-secondary" style="margin-top:1rem;">Same food, same restaurant. Different format for different consumers.</p>
+        </div>
+
+        <div class="source-card" style="margin-bottom:1.5rem;">
+          <h3 style="margin-bottom:0.75rem;">What happens without PACT</h3>
+          <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);line-height:2;">
+            <p>User: "Find me a diabetes clinical trial in Seoul"</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p>AI agent visits hospital website</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p style="color:#ff8888;">Downloads 50,000 tokens of HTML (nav, CSS, ads, footer...)</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p style="color:#ff8888;">Tries to find trial data buried in the page</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p>Only 5% was useful. 95% was wasted.</p>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <h3 style="margin-bottom:0.75rem;">What happens with PACT</h3>
+          <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);line-height:2;">
+            <p>User: "Find me a diabetes clinical trial in Seoul"</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p>AI checks <code>/.well-known/pact.json</code> → discovers trial endpoint</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p style="color:var(--accent);">Requests <code>/pact/trials?q=diabetes</code></p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p style="color:var(--accent);">Gets 850 tokens of clean, structured JSON</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p>100% useful. Zero waste.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== 3. Architecture ===== -->
   <section class="section">
     <div class="container" style="text-align:center;">

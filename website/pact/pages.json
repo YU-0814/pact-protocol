@@ -1,0 +1,49 @@
+{
+  "$pact": "1.0",
+  "$s": "pact:content/page@1",
+  "$t": 1710590400,
+  "$ttl": 86400,
+  "items": [
+    {
+      "id": "home",
+      "n": "PACT Protocol - The Standard for AI Agent Content",
+      "desc": "PACT delivers structured, token-efficient data to AI agents. 57x more efficient than HTML scraping.",
+      "url": "/",
+      "lang": ["en", "ko"],
+      "sections": ["hero", "how-it-works", "architecture", "demo", "comparison", "biomedical", "domains", "conformance", "quickstart"]
+    },
+    {
+      "id": "spec",
+      "n": "PACT v1.0 Specification",
+      "desc": "Complete protocol specification: 5-layer architecture, discovery, schema system, data layer, media, actions, conformance levels, security.",
+      "url": "/docs/",
+      "lang": ["en", "ko"],
+      "sections": ["overview", "architecture", "discovery", "schema", "data-layer", "actions", "conformance", "cross-platform", "security"]
+    },
+    {
+      "id": "playground",
+      "n": "PACT Playground - Interactive JSON Validator",
+      "desc": "Paste PACT JSON to validate structure, detect type (discovery/response), and check conformance level (L1-L4).",
+      "url": "/playground/",
+      "lang": ["en", "ko"],
+      "type": "tool"
+    },
+    {
+      "id": "score",
+      "n": "AI Visibility Score",
+      "desc": "Check how ready your domain is for AI agents. Tests PACT discovery, llms.txt, robots.txt, Schema.org, and response validity.",
+      "url": "/score/",
+      "lang": ["en", "ko"],
+      "type": "tool"
+    },
+    {
+      "id": "demo",
+      "n": "Real-World Comparison Demo",
+      "desc": "Side-by-side comparison of HTML vs PACT using real website analysis. ClinicalTrials.gov: 50,000 tokens HTML → 850 tokens PACT (59x reduction).",
+      "url": "/demo/",
+      "lang": ["en", "ko"],
+      "sources": ["ClinicalTrials.gov", "DrugBank", "Coupang", "Zillow", "PubMed", "Seoul Open Data"]
+    }
+  ],
+  "total": 5
+}

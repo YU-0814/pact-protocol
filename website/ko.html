@@ -58,6 +58,65 @@
     </div>
   </section>
 
+  <!-- 쉬운 설명 -->
+  <section class="section">
+    <div class="container" style="text-align:center;">
+      <p class="section__eyebrow anim">어떻게 동작하나요</p>
+      <h2 class="section__title anim">PACT 쉽게 이해하기</h2>
+      <p class="section__subtitle anim">전문 용어 없이, 그냥 어떻게 동작하는지.</p>
+
+      <div style="max-width:700px;margin:2rem auto;text-align:left;" class="anim">
+        <div class="source-card" style="margin-bottom:1.5rem;">
+          <h3 style="margin-bottom:0.75rem;">식당에 비유하면</h3>
+          <p class="text-secondary" style="margin-bottom:1rem;">식당이 음식을 제공하는 두 가지 방식:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="padding:1rem;border-radius:var(--radius);border:1px solid rgba(255,85,85,0.2);background:rgba(255,85,85,0.03);">
+              <p style="font-weight:600;color:#ff8888;font-size:0.85rem;margin-bottom:0.5rem;">매장 손님용</p>
+              <p class="text-secondary" style="font-size:0.85rem;">사진 메뉴판, 인테리어, 음악, 웨이터, 테이블 세팅 — 풀 경험.</p>
+              <p style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">= 브라우저용 HTML</p>
+            </div>
+            <div style="padding:1rem;border-radius:var(--radius);border:1px solid rgba(0,212,170,0.2);background:rgba(0,212,170,0.03);">
+              <p style="font-weight:600;color:var(--accent);font-size:0.85rem;margin-bottom:0.5rem;">배달앱용</p>
+              <p class="text-secondary" style="font-size:0.85rem;">POS 연동: 메뉴 이름, 가격, 재고 — 데이터만.</p>
+              <p style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">= AI 에이전트용 PACT</p>
+            </div>
+          </div>
+          <p class="text-secondary" style="margin-top:1rem;">같은 음식, 같은 식당. 받는 쪽에 맞는 형식으로 제공.</p>
+        </div>
+
+        <div class="source-card" style="margin-bottom:1.5rem;">
+          <h3 style="margin-bottom:0.75rem;">PACT 없이 하면</h3>
+          <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);line-height:2;">
+            <p>사용자: "서울에서 당뇨 임상시험 찾아줘"</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p>AI 에이전트가 병원 웹사이트 방문</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p style="color:#ff8888;">50,000 토큰의 HTML 다운로드 (네비, CSS, 광고, 푸터...)</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p style="color:#ff8888;">페이지에 묻힌 시험 데이터를 찾으려고 시도</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p>5%만 유용. 95%는 낭비.</p>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <h3 style="margin-bottom:0.75rem;">PACT로 하면</h3>
+          <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);line-height:2;">
+            <p>사용자: "서울에서 당뇨 임상시험 찾아줘"</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p>AI가 <code>/.well-known/pact.json</code> 확인 → 시험 엔드포인트 발견</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p style="color:var(--accent);"><code>/pact/trials?q=diabetes</code> 요청</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p style="color:var(--accent);">850 토큰의 깔끔한 구조화 JSON 수신</p>
+            <p style="color:var(--text-muted);">↓</p>
+            <p>100% 유용. 낭비 제로.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Architecture -->
   <section class="section">
     <div class="container" style="text-align:center;">
