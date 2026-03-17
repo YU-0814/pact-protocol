@@ -4,16 +4,11 @@
   "installCommand": "",
   "outputDirectory": "website",
   "framework": null,
-  "trailingSlash": true,
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
     { "source": "/ko", "destination": "/ko.html" },
-    { "source": "/docs", "destination": "/docs/index.html" },
     { "source": "/docs/ko", "destination": "/docs/ko.html" },
-    { "source": "/playground", "destination": "/playground/index.html" },
     { "source": "/playground/ko", "destination": "/playground/ko.html" },
-    { "source": "/score", "destination": "/score/index.html" },
     { "source": "/score/ko", "destination": "/score/ko.html" },
     { "source": "/demo", "destination": "/demo/index.html" }
   ]
