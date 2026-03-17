@@ -98,53 +98,114 @@
 
 <div class="comparison-split">
 <div class="code-panel code-panel--red">
-<div class="code-panel__header"><span class="code-panel__label">HTML 응답 (실제)</span><span class="code-panel__tokens">~50,000 토큰</span></div>
+<div class="code-panel__header"><span class="code-panel__label">HTML 응답 (실제 페이지)</span><span class="code-panel__tokens">~50,000 토큰</span></div>
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
   &lt;title&gt;Search Results - ClinicalTrials.gov&lt;/title&gt;
-  &lt;!-- 30개 이상의 메타 태그 --&gt;
+  &lt;meta name="viewport" content="width=device-width"&gt;
+  &lt;meta property="og:title" content="..."&gt;
+  &lt;!-- ...27개 더 메타 태그... --&gt;
+
   &lt;style&gt;
-    /* 페이지의 ~65%: Material Design CSS 토큰 */
-    :root {
-      --md-sys-color-primary: #1a73e8;
-      --md-sys-color-on-primary: #ffffff;
-      --md-ref-typeface-brand: 'Google Sans';
-      /* ...500개 이상 CSS 변수... */
-      /* ...200개 이상 @font-face 선언... */
-    }
+  /* ===== 페이지의 65%: CSS 프레임워크 ===== */
+  :root {
+    --md-sys-color-primary: #1a73e8;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-primary-container: #d3e3fd;
+    --md-sys-color-surface: #fef7ff;
+    --md-ref-typeface-brand: 'Google Sans';
+    /* ...487개 더 CSS 변수... */
+  }
+  @font-face { font-family: 'Material Symbols';
+    src: url('/assets/fonts/material-symbols.woff2'); }
+  @font-face { font-family: 'Google Sans';
+    src: url('/assets/fonts/google-sans-regular.woff2'); }
+  /* ...196개 더 @font-face 선언... */
+
+  .mat-toolbar { height: 64px; padding: 0 16px; }
+  .mat-sidenav { width: 280px; }
+  /* ...2,400개 더 CSS 규칙... */
   &lt;/style&gt;
-  &lt;script src="analytics.js"&gt;&lt;/script&gt;
-  &lt;script src="gtm.js"&gt;&lt;/script&gt;
+
+  &lt;script src="/assets/js/gtm.js"&gt;&lt;/script&gt;
+  &lt;script src="/assets/js/analytics.js"&gt;&lt;/script&gt;
+  &lt;script src="/assets/js/cookie-consent.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
-  &lt;!-- ~8%: 네비게이션 --&gt;
-  &lt;header class="mega-nav"&gt;
-    &lt;nav&gt;...800 토큰의 네비게이션...&lt;/nav&gt;
+
+  &lt;!-- ===== 8%: 네비게이션 (800+ 토큰) ===== --&gt;
+  &lt;header class="site-header"&gt;
+    &lt;div class="header-logo"&gt;
+      &lt;img src="/assets/nlm-logo.svg" alt="NLM"&gt;
+      &lt;span&gt;ClinicalTrials.gov&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;nav class="main-nav"&gt;
+      &lt;a href="/search"&gt;연구 찾기&lt;/a&gt;
+      &lt;a href="/about"&gt;연구 정보&lt;/a&gt;
+      &lt;a href="/submit"&gt;연구 등록&lt;/a&gt;
+      &lt;a href="/results"&gt;결과&lt;/a&gt;
+      &lt;a href="/api"&gt;API&lt;/a&gt;
+    &lt;/nav&gt;
   &lt;/header&gt;
 
-  &lt;!-- ~7%: 의학 용어 사이드바 --&gt;
+  &lt;!-- ===== 7%: 의학 용어 사이드바 (700+ 토큰) ===== --&gt;
   &lt;aside class="glossary-drawer"&gt;
-    ...의학 용어 검색 UI...
+    &lt;input type="text" placeholder="의학 용어 검색"&gt;
+    &lt;div class="term"&gt;무작위배정: 연구에서...&lt;/div&gt;
+    &lt;div class="term"&gt;이중맹검: 연구자와...&lt;/div&gt;
+    &lt;div class="term"&gt;위약: 비활성...&lt;/div&gt;
+    &lt;!-- ...200개 이상 의학 용어... --&gt;
   &lt;/aside&gt;
 
-  &lt;!-- ~15%: 스크립트/프레임워크 --&gt;
-  &lt;script type="module"&gt;
-    ...추적, 분석, 이벤트 리스너...
-  &lt;/script&gt;
-
-  &lt;!-- ~5%: 실제 데이터 (여기에 묻혀 있음) --&gt;
-  &lt;div class="search-results"&gt;
-    &lt;div class="result-card"&gt;
-      &lt;h3&gt;제3상 당뇨병 예방 시험&lt;/h3&gt;
-      &lt;span class="status"&gt;모집 중&lt;/span&gt;
-    &lt;/div&gt;
+  &lt;!-- ===== 검색 필터 (500+ 토큰) ===== --&gt;
+  &lt;div class="search-filters"&gt;
+    &lt;select name="status"&gt;...&lt;/select&gt;
+    &lt;select name="phase"&gt;...&lt;/select&gt;
+    &lt;!-- ...필터 컨트롤... --&gt;
   &lt;/div&gt;
 
-  &lt;footer&gt;...법적 고지...&lt;/footer&gt;
+  &lt;!-- ===== 5%: 실제 시험 데이터 (드디어!) ===== --&gt;
+  &lt;div class="search-results"&gt;
+    &lt;div class="result-card"&gt;
+      &lt;h3&gt;제3상 당뇨병 예방 임상시험&lt;/h3&gt;
+      &lt;span class="badge"&gt;모집 중&lt;/span&gt;
+      &lt;p&gt;서울대학교병원&lt;/p&gt;
+      &lt;p&gt;등록: 450명&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;!-- ...4개 더 결과 카드... --&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ===== 15%: 스크립트 (7,500+ 토큰) ===== --&gt;
+  &lt;script type="module"&gt;
+    // Angular 프레임워크 부트스트랩
+    // 필터 이벤트 리스너
+    // 검색 상태 관리
+    // 쿠키 동의 핸들러
+    // 분석 이벤트 추적
+    // ...수천 줄의 코드...
+  &lt;/script&gt;
+
+  &lt;!-- ===== 푸터 (1,200+ 토큰) ===== --&gt;
+  &lt;footer class="site-footer"&gt;
+    &lt;div&gt;&lt;h4&gt;리소스&lt;/h4&gt;...12개 링크...&lt;/div&gt;
+    &lt;div&gt;&lt;h4&gt;정책&lt;/h4&gt;...8개 링크...&lt;/div&gt;
+    &lt;p&gt;U.S. National Library of Medicine&lt;/p&gt;
+  &lt;/footer&gt;
+
+  &lt;div class="cookie-banner"&gt;...쿠키 배너...&lt;/div&gt;
+
 &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+&lt;/html&gt;
+
+&lt;!--
+  화면 표시를 위해 축약됨
+  전체 페이지: ~185,000 글자 / ~50,000 토큰
+  구성: CSS 65% | 스크립트 15% | 네비 8% |
+  용어집 7% | 데이터 5% | 푸터 &lt;1%
+  출처: clinicaltrials.gov (2026년 3월 분석)
+--&gt;</code></pre>
 </div>
 
 <div class="code-panel code-panel--green">

@@ -101,55 +101,143 @@
 
 <div class="comparison-split">
 <div class="code-panel code-panel--red">
-<div class="code-panel__header"><span class="code-panel__label">HTML Response (actual)</span><span class="code-panel__tokens">~50,000 tokens</span></div>
+<div class="code-panel__header"><span class="code-panel__label">HTML Response (actual page)</span><span class="code-panel__tokens">~50,000 tokens</span></div>
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
   &lt;title&gt;Search Results - ClinicalTrials.gov&lt;/title&gt;
-  &lt;!-- 30+ meta tags --&gt;
+  &lt;meta name="viewport" content="width=device-width"&gt;
+  &lt;meta property="og:title" content="..."&gt;
+  &lt;meta property="og:description" content="..."&gt;
+  &lt;meta name="twitter:card" content="summary"&gt;
+  &lt;!-- ...27 more meta tags... --&gt;
+
   &lt;style&gt;
-    /* ~65% of page: Material Design CSS tokens */
-    :root {
-      --md-sys-color-primary: #1a73e8;
-      --md-sys-color-on-primary: #ffffff;
-      --md-ref-typeface-brand: 'Google Sans';
-      /* ...500+ CSS variables... */
-      /* ...200+ @font-face declarations... */
-      /* ...breakpoint definitions... */
-    }
+  /* ===== 65% of the page: CSS framework ===== */
+  :root {
+    --md-sys-color-primary: #1a73e8;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-primary-container: #d3e3fd;
+    --md-sys-color-surface: #fef7ff;
+    --md-sys-color-surface-variant: #e7e0ec;
+    --md-sys-color-outline: #79747e;
+    --md-sys-color-outline-variant: #cac4d0;
+    --md-ref-typeface-brand: 'Google Sans';
+    --md-ref-typeface-plain: 'Roboto';
+    /* ...487 more CSS variables... */
+  }
+  @font-face { font-family: 'Material Symbols';
+    src: url('/assets/fonts/material-symbols.woff2'); }
+  @font-face { font-family: 'Google Sans';
+    src: url('/assets/fonts/google-sans-regular.woff2'); }
+  @font-face { font-family: 'Google Sans';
+    font-weight: 500;
+    src: url('/assets/fonts/google-sans-medium.woff2'); }
+  /* ...196 more @font-face declarations... */
+
+  .mat-toolbar { height: 64px; padding: 0 16px; }
+  .mat-sidenav { width: 280px; }
+  .mat-card { border-radius: 12px; }
+  /* ...2,400 more CSS rules... */
   &lt;/style&gt;
-  &lt;script src="analytics.js"&gt;&lt;/script&gt;
-  &lt;script src="gtm.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Tracking &amp; Analytics --&gt;
+  &lt;script src="/assets/js/gtm.js"&gt;&lt;/script&gt;
+  &lt;script src="/assets/js/analytics.js"&gt;&lt;/script&gt;
+  &lt;script src="/assets/js/cookie-consent.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
-  &lt;!-- ~8%: Navigation --&gt;
-  &lt;header class="mega-nav"&gt;
-    &lt;nav&gt;...800 tokens of navigation...&lt;/nav&gt;
+
+  &lt;!-- ===== 8%: Navigation (800+ tokens) ===== --&gt;
+  &lt;header class="site-header"&gt;
+    &lt;div class="header-logo"&gt;
+      &lt;img src="/assets/nlm-logo.svg" alt="NLM"&gt;
+      &lt;span&gt;ClinicalTrials.gov&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;nav class="main-nav"&gt;
+      &lt;a href="/search"&gt;Find Studies&lt;/a&gt;
+      &lt;a href="/about"&gt;About Studies&lt;/a&gt;
+      &lt;a href="/submit"&gt;Submit Studies&lt;/a&gt;
+      &lt;a href="/results"&gt;Results&lt;/a&gt;
+      &lt;a href="/trends"&gt;Trends&lt;/a&gt;
+      &lt;a href="/api"&gt;API&lt;/a&gt;
+    &lt;/nav&gt;
+    &lt;div class="header-actions"&gt;
+      &lt;button class="search-toggle"&gt;Search&lt;/button&gt;
+      &lt;button class="menu-toggle"&gt;Menu&lt;/button&gt;
+    &lt;/div&gt;
   &lt;/header&gt;
 
-  &lt;!-- ~7%: Glossary sidebar --&gt;
+  &lt;!-- ===== 7%: Glossary sidebar (700+ tokens) ===== --&gt;
   &lt;aside class="glossary-drawer"&gt;
-    ...medical glossary search UI...
+    &lt;div class="glossary-search"&gt;
+      &lt;input type="text" placeholder="Search medical terms"&gt;
+    &lt;/div&gt;
+    &lt;div class="glossary-list"&gt;
+      &lt;div class="term"&gt;Randomized: A study where...&lt;/div&gt;
+      &lt;div class="term"&gt;Double-blind: Neither...&lt;/div&gt;
+      &lt;div class="term"&gt;Placebo: An inactive...&lt;/div&gt;
+      &lt;!-- ...200+ medical terms... --&gt;
+    &lt;/div&gt;
   &lt;/aside&gt;
 
-  &lt;!-- ~15%: Scripts/frameworks --&gt;
-  &lt;script type="module"&gt;
-    ...tracking, analytics, event listeners...
-  &lt;/script&gt;
-
-  &lt;!-- ~5%: ACTUAL DATA (buried here) --&gt;
-  &lt;div class="search-results"&gt;
-    &lt;div class="result-card"&gt;
-      &lt;h3&gt;Phase III Diabetes Prevention&lt;/h3&gt;
-      &lt;span class="status"&gt;Recruiting&lt;/span&gt;
-      &lt;!-- actual trial info --&gt;
-    &lt;/div&gt;
+  &lt;!-- ===== Search filters (500+ tokens) ===== --&gt;
+  &lt;div class="search-filters"&gt;
+    &lt;select name="status"&gt;...&lt;/select&gt;
+    &lt;select name="phase"&gt;...&lt;/select&gt;
+    &lt;select name="type"&gt;...&lt;/select&gt;
+    &lt;input type="date" name="start"&gt;
+    &lt;!-- ...filter controls... --&gt;
   &lt;/div&gt;
 
-  &lt;footer&gt;...legal disclaimers...&lt;/footer&gt;
+  &lt;!-- ===== 5%: ACTUAL TRIAL DATA (finally!) ===== --&gt;
+  &lt;div class="search-results"&gt;
+    &lt;div class="result-card"&gt;
+      &lt;h3&gt;Phase III Diabetes Prevention Trial&lt;/h3&gt;
+      &lt;span class="badge recruiting"&gt;Recruiting&lt;/span&gt;
+      &lt;p&gt;Seoul National University Hospital&lt;/p&gt;
+      &lt;p&gt;Enrollment: 450&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;!-- ...4 more result cards... --&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ===== 15%: Scripts (7,500+ tokens) ===== --&gt;
+  &lt;script type="module"&gt;
+    // Angular framework bootstrap
+    // Event listeners for filters
+    // Search state management
+    // Glossary drawer toggle
+    // Cookie consent handler
+    // Analytics event tracking
+    // Accessibility helpers
+    // ...thousands of lines...
+  &lt;/script&gt;
+
+  &lt;!-- ===== Footer (1,200+ tokens) ===== --&gt;
+  &lt;footer class="site-footer"&gt;
+    &lt;div class="footer-grid"&gt;
+      &lt;div&gt;&lt;h4&gt;Resources&lt;/h4&gt;...12 links...&lt;/div&gt;
+      &lt;div&gt;&lt;h4&gt;Policies&lt;/h4&gt;...8 links...&lt;/div&gt;
+      &lt;div&gt;&lt;h4&gt;Connect&lt;/h4&gt;...6 links...&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;p&gt;U.S. National Library of Medicine&lt;/p&gt;
+    &lt;p&gt;8600 Rockville Pike, Bethesda MD&lt;/p&gt;
+  &lt;/footer&gt;
+
+  &lt;!-- Cookie banner --&gt;
+  &lt;div class="cookie-banner"&gt;...&lt;/div&gt;
+
 &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+&lt;/html&gt;
+
+&lt;!--
+  TRUNCATED FOR DISPLAY
+  Full page: ~185,000 characters / ~50,000 tokens
+  Breakdown: CSS 65% | Scripts 15% | Nav 8% |
+  Glossary 7% | Data 5% | Footer &lt;1%
+  Source: clinicaltrials.gov (analyzed March 2026)
+--&gt;</code></pre>
 </div>
 
 <div class="code-panel code-panel--green">
